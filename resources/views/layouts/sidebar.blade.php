@@ -95,7 +95,8 @@
         </a>
       @endif
 
-      @if(in_array(auth()->user()->roles, ['operator']))
+      {{-- Inventory Management for all roles --}}
+      @if(in_array(auth()->user()->roles, ['admin', 'operator', 'owner']))
         {{-- Divider --}}
         <div class="pt-4 pb-2">
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
@@ -151,6 +152,63 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
           </svg>
           <span>Stock Out</span>
+        </a>
+      @endif
+
+      {{-- Role-specific features --}}
+      @if(auth()->user()->roles === 'owner')
+        {{-- Reports Section for Owner --}}
+        <div class="pt-4 pb-2">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
+            Reports
+          </p>
+        </div>
+
+        {{-- Stock Reports --}}
+        <a href="{{ route('reports.stock-in') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('reports.stock-in') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span>Stock In Reports</span>
+        </a>
+
+        <a href="{{ route('reports.stock-out') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('reports.stock-out') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span>Stock Out Reports</span>
+        </a>
+      @endif
+
+      @if(auth()->user()->roles === 'operator')
+        {{-- History Section for Operator --}}
+        <div class="pt-4 pb-2">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
+            History
+          </p>
+        </div>
+
+        {{-- Stock History --}}
+        <a href="{{ route('history.stock-in') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('history.stock-in') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Stock In History</span>
+        </a>
+
+        <a href="{{ route('history.stock-out') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('history.stock-out') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Stock Out History</span>
         </a>
       @endif
     @endauth
