@@ -7,6 +7,7 @@ use App\Models\StockOutItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StockOutController extends Controller
 {
@@ -220,5 +221,94 @@ class StockOutController extends Controller
 
         return redirect()->route('stock-outs.index')
                         ->with('success', 'Stock Out transaction deleted successfully.');
+    }
+
+    /**
+     * Display stock out reports for owner role
+     */
+    public function reports(Request $request)
+    {
+        $query = StockOut::with(['user', 'items.product']);
+
+        // Apply date filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('date', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('date', '<=', $request->date_to);
+        }
+
+        // Default to current month if no dates provided
+        if (!$request->has('date_from') && !$request->has('date_to')) {
+            $query->whereMonth('date', now()->month)
+                  ->whereYear('date', now()->year);
+        }
+
+        $stockOuts = $query->orderBy('date', 'desc')->get();
+        $totalAmount = $stockOuts->sum('total_amount');
+        $totalItems = $stockOuts->sum(function($stockOut) {
+            return $stockOut->items->sum('quantity');
+        });
+
+        return view('reports.stock-out', compact('stockOuts', 'totalAmount', 'totalItems'));
+    }
+
+    /**
+     * Export stock out report to PDF
+     */
+    public function exportPdf(Request $request)
+    {
+        $query = StockOut::with(['user', 'items.product']);
+
+        // Apply date filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('date', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('date', '<=', $request->date_to);
+        }
+
+        // Default to current month if no dates provided
+        if (!$request->has('date_from') && !$request->has('date_to')) {
+            $query->whereMonth('date', now()->month)
+                  ->whereYear('date', now()->year);
+        }
+
+        $stockOuts = $query->orderBy('date', 'desc')->get();
+        $totalAmount = $stockOuts->sum('total_amount');
+        $totalItems = $stockOuts->sum(function($stockOut) {
+            return $stockOut->items->sum('quantity');
+        });
+
+        $dateFrom = $request->date_from ?? now()->startOfMonth()->format('Y-m-d');
+        $dateTo = $request->date_to ?? now()->endOfMonth()->format('Y-m-d');
+
+        $pdf = \PDF::loadView('reports.stock-out-pdf', compact('stockOuts', 'totalAmount', 'totalItems', 'dateFrom', 'dateTo'));
+        
+        return $pdf->download('stock-out-report-' . $dateFrom . '-to-' . $dateTo . '.pdf');
+    }
+
+    /**
+     * Display stock out history for operator role
+     */
+    public function history(Request $request)
+    {
+        $query = StockOut::with(['user', 'items.product'])
+                         ->where('user_id', auth()->id());
+
+        // Apply date filters
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('date', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('date', '<=', $request->date_to);
+        }
+
+        $stockOuts = $query->latest()->paginate(10);
+
+        return view('operator.stock-out-history', compact('stockOuts'));
     }
 }
