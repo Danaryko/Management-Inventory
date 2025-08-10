@@ -19,7 +19,7 @@
       </div>
       <div class="py-3 grid grid-cols-3 gap-4">
         <dt class="text-gray-500">Role</dt>
-        <dd class="col-span-2 font-medium capitalize">{{ auth()->user()->role }}</dd>
+        <dd class="col-span-2 font-medium capitalize">{{ auth()->user()->roles }}</dd>
       </div>
     </dl>
   </div>

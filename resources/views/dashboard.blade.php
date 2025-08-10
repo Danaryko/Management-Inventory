@@ -5,20 +5,17 @@
 
 @section('content')
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-  {{-- Card --}}
   <div class="bg-white rounded-xl border border-gray-200 p-4">
     <div class="text-sm text-gray-500">Total Users</div>
     <div class="mt-2 text-2xl font-semibold">{{ $totalUsers ?? '-' }}</div>
   </div>
-
   <div class="bg-white rounded-xl border border-gray-200 p-4">
     <div class="text-sm text-gray-500">Role Anda</div>
-    <div class="mt-2 text-2xl font-semibold capitalize">{{ auth()->user()->role }}</div>
+    <div class="mt-2 text-2xl font-semibold capitalize">{{ auth()->user()->roles }}</div>
   </div>
-
   <div class="bg-white rounded-xl border border-gray-200 p-4">
     <div class="text-sm text-gray-500">Terakhir Login</div>
-    <div class="mt-2 text-2xl font-semibold">{{ auth()->user()->updated_at->format('d M Y H:i') }}</div>
+    <div class="mt-2 text-2xl font-semibold">{{ optional(auth()->user()->updated_at)->format('d M Y H:i') }}</div>
   </div>
 </div>
 
