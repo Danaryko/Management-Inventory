@@ -47,7 +47,7 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->with('success', 'User berhasil dibuat.');
+            ->with('status', 'User berhasil dibuat.');
     }
 
     // UPDATE
@@ -57,7 +57,7 @@ class UserController extends Controller
             'name'     => ['sometimes','string','max:255'],
             'email'    => ['sometimes','email','max:255', Rule::unique('users','email')->ignore($user->id)],
             'password' => ['sometimes','nullable','min:6'],
-            'roles'     => ['sometimes', Rule::in(['admin','staff','user'])],
+            'role'     => ['sometimes', Rule::in(['admin','staff','user'])],
         ]);
 
         if (array_key_exists('password', $data)) {
@@ -72,19 +72,19 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->with('success', 'User berhasil diperbarui.');
+            ->with('status', 'User berhasil diperbarui.');
     }
 
     // UPDATE ROLE SAJA
     public function updateRole(Request $request, User $user)
     {
         $data = $request->validate([
-            'roles' => ['required', Rule::in(['admin','staff','user'])],
+            'role' => ['required', Rule::in(['admin','staff','user'])],
         ]);
 
-        $user->update(['roles' => $data['roles']]);
+        $user->update(['role' => $data['role']]);
 
-        return back()->with('success', 'Role user berhasil diubah.');
+        return back()->with('status', 'Role user berhasil diubah.');
     }
 
     // DELETE (soft delete jika model pakai SoftDeletes)
@@ -92,6 +92,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return back()->with('success', 'User berhasil dihapus.');
+        return back()->with('status', 'User berhasil dihapus.');
     }
 }

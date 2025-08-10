@@ -30,6 +30,10 @@ Route::middleware(['auth'])->group(function () {
     // User Management (hanya admin)
     Route::middleware('role:admin')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
-        // tambahkan CRUD lain jika perlu
+        Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::post('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
     });
 });
