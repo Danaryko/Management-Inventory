@@ -48,8 +48,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
     });
 
-    // Operator Features
-    Route::middleware('roles:operator')->group(function () {
+    // Inventory Management Features (Admin, Operator, Owner)
+    Route::middleware('roles:admin,operator,owner')->group(function () {
         // Categories Management
         Route::resource('categories', CategoryController::class);
         
@@ -64,8 +64,20 @@ Route::middleware(['auth'])->group(function () {
         
         // Stock Out Management
         Route::resource('stock-outs', StockOutController::class);
-        
-        
+    });
+
+    // Owner Features - Reports with PDF Export
+    Route::middleware('roles:owner')->group(function () {
+        Route::get('/reports/stock-in', [StockInController::class, 'reports'])->name('reports.stock-in');
+        Route::get('/reports/stock-out', [StockOutController::class, 'reports'])->name('reports.stock-out');
+        Route::get('/reports/stock-in/pdf', [StockInController::class, 'exportPdf'])->name('reports.stock-in.pdf');
+        Route::get('/reports/stock-out/pdf', [StockOutController::class, 'exportPdf'])->name('reports.stock-out.pdf');
+    });
+
+    // Operator Features - Activity History
+    Route::middleware('roles:operator')->group(function () {
+        Route::get('/history/stock-in', [StockInController::class, 'history'])->name('history.stock-in');
+        Route::get('/history/stock-out', [StockOutController::class, 'history'])->name('history.stock-out');
     });
 
     // Owner Features (will be added in Phase 3)
