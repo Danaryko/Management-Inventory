@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Stock Out Details')
+@section('page_title', content: 'Stock Out')
 
 @section('content')
 <div class="p-6 max-w-6xl mx-auto">

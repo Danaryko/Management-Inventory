@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Tambah User')
-@section('page_title', 'Tambah User Baru')
+@section('page_title', 'User')
 
 @section('content')
 <div class="max-w-2xl">

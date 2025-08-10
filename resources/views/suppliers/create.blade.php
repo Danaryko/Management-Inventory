@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Create Supplier')
+@section('page_title', 'Supplier')
 
 @section('content')
 <div class="p-6 max-w-2xl mx-auto">

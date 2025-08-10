@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Create Category')
+@section('page_title','Category')
 
 @section('content')
 <div class="p-6 max-w-2xl mx-auto">

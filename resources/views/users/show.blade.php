@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Detail User')
-@section('page_title', 'Detail User')
+@section('page_title', 'User Management')
 
 @section('content')
 <div x-data="{ showDeleteModal: false }" class="space-y-6">
