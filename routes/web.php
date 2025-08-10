@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
 
 // TAMU: form login & register
 Route::middleware('guest')->group(function () {
@@ -30,6 +31,12 @@ Route::middleware(['auth'])->group(function () {
     // User Management (hanya admin)
     Route::middleware('role:admin')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
-        // tambahkan CRUD lain jika perlu
+        Route::get('/users/create', fn() => view('users.create'))->name('users.create');
+        Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/users/{user}/edit', fn(User $user) => view('users.edit', compact('user')))->name('users.edit');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::post('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
     });
 });
