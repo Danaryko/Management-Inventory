@@ -24,23 +24,23 @@
       @auth
         {{-- User info (hidden on small screens) --}}
         <div class="hidden lg:flex items-center gap-3">
-          <div class="text-right">
-            <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
-            <p class="text-xs text-gray-500">
-              <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full
-                {{ auth()->user()->roles === 'admin' ? 'bg-red-100 text-red-800' : 
-                   (auth()->user()->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
-                {{ ucfirst(auth()->user()->roles) }}
-              </span>
-            </p>
-          </div>
-          
           {{-- Avatar --}}
           <div class="h-8 w-8 rounded-full bg-gray-900 flex items-center justify-center">
             <span class="text-white font-medium text-sm">
               {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
             </span>
           </div>
+          <div class="text-right">
+            <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
+            <!-- <p class="text-xs text-gray-500">
+              <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full
+                {{ auth()->user()->roles === 'admin' ? 'bg-red-100 text-red-800' : 
+                   (auth()->user()->roles === 'owner' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+                {{ ucfirst(auth()->user()->roles) }}
+              </span>
+            </p> -->
+          </div>
+        
         </div>
 
         {{-- Mobile user info --}}

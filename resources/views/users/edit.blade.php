@@ -144,8 +144,8 @@
           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm @error('roles') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
         >
           <option value="admin" {{ old('roles', $user->roles) === 'admin' ? 'selected' : '' }}>Admin</option>
-          <option value="staff" {{ old('roles', $user->roles === 'staff' ? 'selected' : '' }}>Staff</option>
-          <option value="user" {{ old('roles', $user->roles) === 'user' ? 'selected' : '' }}>User</option>
+          <option value="owner" {{ old('roles', $user->roles) === 'owner' ? 'selected' : '' }}>Owner</option>
+          <option value="operator" {{ old('roles', $user->roles) === 'operator' ? 'selected' : '' }}>Operator</option>
         </select>
         @error('roles')
           <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -154,7 +154,7 @@
           Role saat ini: 
           <span class="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full
             {{ $user->roles === 'admin' ? 'bg-red-100 text-red-800' : 
-               ($user->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+               ($user->roles === 'owner' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
             {{ ucfirst($user->roles) }}
           </span>
         </p>

@@ -135,17 +135,17 @@
           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm @error('roles') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
         >
           <option value="">Pilih Role</option>
-          <option value="admin" {{ old('rolse') === 'admin' ? 'selected' : '' }}>Admin</option>
-          <option value="staff" {{ old('roles') === 'staff' ? 'selected' : '' }}>Staff</option>
-          <option value="user" {{ old('roles') === 'user' ? 'selected' : '' }}>User</option>
+          <option value="admin" {{ old('roles') === 'admin' ? 'selected' : '' }}>Admin</option>
+          <option value="owner" {{ old('roles') === 'owner' ? 'selected' : '' }}>Owner</option>
+          <option value="operator" {{ old('roles') === 'operator' ? 'selected' : '' }}>Operator</option>
         </select>
         @error('roles')
           <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
         @enderror
         <p class="mt-1 text-sm text-gray-500">
           <strong>Admin:</strong> Akses penuh ke semua fitur.
-          <strong>Staff:</strong> Akses terbatas ke fitur operasional.
-          <strong>User:</strong> Akses dasar untuk penggunaan sistem.
+          <strong>Owner:</strong> Akses terbatas ke laporan-laporan.
+          <strong>Operator:</strong> Akses dasar ke fitur operasional.
         </p>
       </div>
 

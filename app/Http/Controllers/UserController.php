@@ -79,7 +79,7 @@ class UserController extends Controller
     public function updateRole(Request $request, User $user)
     {
         $data = $request->validate([
-            'roles' => ['required', Rule::in(['admin','staff','user'])],
+            'roles' => ['required', Rule::in(['admin','owner','operator'])],
         ]);
 
         $user->update(['roles' => $data['roles']]);

@@ -24,7 +24,7 @@
           <div class="mt-3">
             <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full
               {{ auth()->user()->roles === 'admin' ? 'bg-red-100 text-red-800' : 
-                 (auth()->user()->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+                 (auth()->user()->roles === 'owner' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
               {{ ucfirst(auth()->user()->roles) }}
             </span>
           </div>
@@ -65,7 +65,7 @@
           <dd>
             <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full
               {{ auth()->user()->roles === 'admin' ? 'bg-red-100 text-red-800' : 
-                 (auth()->user()->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+                 (auth()->user()->roles === 'owner' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
               {{ ucfirst(auth()->user()->roles) }}
             </span>
           </dd>
