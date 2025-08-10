@@ -61,14 +61,32 @@
     </a>
 
     @auth
-      @if(auth()->user()->roles === 'admin')
+      {{-- Activity History for admins, managers, and operators --}}
+      @if(in_array(auth()->user()->roles, ['admin', 'manager', 'operator']))
         {{-- Divider --}}
         <div class="pt-4 pb-2">
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
-            Inventory Management
+            Activity Management
           </p>
         </div>
         
+        {{-- Activity History --}}
+        <a href="{{ route('activities.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('activities.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span>Activity History</span>
+          @if(request()->routeIs('activities.*'))
+            <div class="ml-auto">
+              <div class="h-2 w-2 bg-white rounded-full"></div>
+            </div>
+          @endif
+        </a>
+      @endif
+
+      @if(auth()->user()->roles === 'admin')
         {{-- User Management --}}
         <a href="{{ route('users.index') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
@@ -82,16 +100,6 @@
               <div class="h-2 w-2 bg-white rounded-full"></div>
             </div>
           @endif
-        </a>
-
-        {{-- Activity History --}}
-        <a href="{{ route('activities.index') }}"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-           {{ request()->routeIs('activities.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
-          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-          </svg>
-          <span>Activity History</span>
         </a>
       @endif
 

@@ -26,6 +26,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  {{-- Enhanced Dashboard Styles --}}
+  <link href="{{ asset('css/enhanced-dashboard.css') }}" rel="stylesheet">
+  
+  {{-- Additional styles for specific pages --}}
+  @stack('styles')
 </head>
 <body class="h-full font-sans antialiased">
   <div x-data="{ sidebarOpen: false }" class="min-h-screen flex bg-gray-50">
@@ -126,5 +132,11 @@
 
   {{-- AlpineJS for interactive components --}}
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  
+  {{-- Enhanced Dashboard JavaScript --}}
+  <script src="{{ asset('js/enhanced-dashboard.js') }}"></script>
+  
+  {{-- Page-specific scripts --}}
+  @stack('scripts')
 </body>
 </html>
