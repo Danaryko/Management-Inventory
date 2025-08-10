@@ -91,6 +91,7 @@ class DashboardController extends Controller
                 'monthly_stock_outs' => StockOut::whereMonth('created_at', now()->month)->count(),
                 'low_stock_items' => $this->getLowStockCount(),
             ],
+            'chartData' => $this->getStockChartData(),
             'quickActions' => [
                 ['title' => 'Stock Reports', 'url' => route('reports.stock-in'), 'icon' => 'chart-bar', 'color' => 'blue'],
                 ['title' => 'Inventory Overview', 'url' => route('products.index'), 'icon' => 'cube', 'color' => 'orange'],
@@ -179,6 +180,58 @@ class DashboardController extends Controller
         // This would need actual stock level checking
         // For now, return a placeholder
         return 0;
+    }
+
+    /**
+     * Get stock in/out chart data for the last 6 months
+     */
+    private function getStockChartData()
+    {
+        $months = [];
+        $stockInData = [];
+        $stockOutData = [];
+        
+        // Get data for the last 6 months
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $months[] = $date->format('M Y');
+            
+            // Get stock in count for this month
+            $stockInCount = StockIn::whereYear('date', $date->year)
+                ->whereMonth('date', $date->month)
+                ->count();
+            $stockInData[] = $stockInCount;
+            
+            // Get stock out count for this month
+            $stockOutCount = StockOut::whereYear('date', $date->year)
+                ->whereMonth('date', $date->month)
+                ->count();
+            $stockOutData[] = $stockOutCount;
+        }
+        
+        return [
+            'labels' => $months,
+            'datasets' => [
+                [
+                    'label' => 'Stock In',
+                    'data' => $stockInData,
+                    'backgroundColor' => 'rgba(34, 197, 94, 0.1)',
+                    'borderColor' => 'rgb(34, 197, 94)',
+                    'borderWidth' => 2,
+                    'fill' => true,
+                    'tension' => 0.4
+                ],
+                [
+                    'label' => 'Stock Out',
+                    'data' => $stockOutData,
+                    'backgroundColor' => 'rgba(239, 68, 68, 0.1)',
+                    'borderColor' => 'rgb(239, 68, 68)',
+                    'borderWidth' => 2,
+                    'fill' => true,
+                    'tension' => 0.4
+                ]
+            ]
+        ];
     }
 
     /**
