@@ -93,8 +93,6 @@ class DashboardController extends Controller
             ],
             'quickActions' => [
                 ['title' => 'Stock Reports', 'url' => route('reports.stock-in'), 'icon' => 'chart-bar', 'color' => 'blue'],
-                ['title' => 'Export Data', 'url' => '#', 'icon' => 'download', 'color' => 'green'],
-                ['title' => 'Business Analytics', 'url' => '#', 'icon' => 'trending-up', 'color' => 'purple'],
                 ['title' => 'Inventory Overview', 'url' => route('products.index'), 'icon' => 'cube', 'color' => 'orange'],
             ]
         ];

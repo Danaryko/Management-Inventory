@@ -195,7 +195,7 @@
         </div>
       </div>
     </div>
-  @elseif(auth()->user()->roles === 'manager')
+  @elseif(auth()->user()->roles === 'manager, admin')
     {{-- Manager Stats --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
@@ -341,7 +341,7 @@
       </div>
     </div>
     
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {{-- Common Action: View Profile --}}
       <a href="{{ route('profile') }}" 
          class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group">
