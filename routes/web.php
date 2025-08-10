@@ -44,10 +44,12 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
         Route::post('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
+        // Activity History (personal)
+        Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
     });
 
     // Operator Features
-    Route::middleware('roles:operator,admin')->group(function () {
+    Route::middleware('roles:operator')->group(function () {
         // Categories Management
         Route::resource('categories', CategoryController::class);
         
@@ -63,12 +65,11 @@ Route::middleware(['auth'])->group(function () {
         // Stock Out Management
         Route::resource('stock-outs', StockOutController::class);
         
-        // Activity History (personal)
-        Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+        
     });
 
     // Owner Features (will be added in Phase 3)
-    Route::middleware('roles:owner,admin')->group(function () {
+    Route::middleware('roles:owner')->group(function () {
         // Enhanced dashboard with charts
         // Stock management overview
         // Reports
