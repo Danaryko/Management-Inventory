@@ -44,18 +44,18 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Activity History (Admin, Manager, Operator access)
-    Route::middleware('roles:admin,manager,operator')->group(function () {
+    Route::middleware('roles:admin')->group(function () {
         Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
         Route::get('/activities/export', [ActivityController::class, 'export'])->name('activities.export');
     });
 
-    // Inventory Management Features (Admin, Operator, Owner)
-    Route::middleware('roles:admin,operator,owner')->group(function () {
+    // Inventory Management Features (Operator)
+    Route::middleware('roles:operator')->group(function () {
         // Categories Management
         Route::resource('categories', CategoryController::class);
         
         // Products Management
-        Route::resource('products', ProductController::class);
+        // Route::resource('products', ProductController::class);
         
         // Suppliers Management
         Route::resource('suppliers', SupplierController::class);
@@ -86,10 +86,20 @@ Route::middleware(['auth'])->group(function () {
         // Enhanced dashboard with charts
         // Stock management overview
         // Reports
+        // Route::get('products', [ProductController::class, 'index'])->name('products.index');
+        // Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
     });
 
     // Admin Features (will be added in Phase 4)
     Route::middleware('roles:admin')->group(function () {
         // System-wide activity logs
+        // Route::get('products', [ProductController::class, 'index'])->name('products.index');
+        // Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
     });
+    
+    // Inventory Management - Products (multi role)
+    Route::middleware('roles:operator,owner,admin')->group(function () {
+        Route::resource('products', ProductController::class);
+    });
+
 });

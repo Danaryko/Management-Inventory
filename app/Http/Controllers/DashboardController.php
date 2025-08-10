@@ -68,9 +68,7 @@ class DashboardController extends Controller
             ],
             'quickActions' => [
                 ['title' => 'Manage Users', 'url' => route('users.index'), 'icon' => 'users', 'color' => 'blue'],
-                ['title' => 'System Settings', 'url' => '#', 'icon' => 'cog', 'color' => 'gray'],
                 ['title' => 'Activity Logs', 'url' => route('activities.index'), 'icon' => 'document-text', 'color' => 'green'],
-                ['title' => 'Reports', 'url' => '#', 'icon' => 'chart-bar', 'color' => 'purple'],
             ]
         ];
     }

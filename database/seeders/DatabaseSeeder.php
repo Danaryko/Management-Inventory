@@ -3,27 +3,47 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $users = [
+            [
+                'name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'password' => Hash::make('password'),
+                'roles' => 'admin',
+            ],
+            [
+                'name' => 'Owner',
+                'email' => 'owner@gmail.com',
+                'password' => Hash::make('password'),
+                'roles' => 'owner',
+            ],
+            [
+                'name' => 'Operator Satu',
+                'email' => 'operator@gmail.com',
+                'password' => Hash::make('password'),
+                'roles' => 'operator',
+            ],
+            [
+                'name' => 'Operator Dua',
+                'email' => 'operator2@gmail.com',
+                'password' => Hash::make('password'),
+                'roles' => 'operator',
+            ],
+        ];
 
-        User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('password'),
-            'roles' => 'admin'
-        ]);
+        foreach ($users as $user) {
+            User::create($user);
+        }
 
+        // Seeder lainnya
         $this->call([
-            CategorySeeder::class
+            CategorySeeder::class,
         ]);
     }
 }

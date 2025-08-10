@@ -145,21 +145,7 @@
     </div>
   @elseif(auth()->user()->roles === 'owner')
     {{-- Owner Stats --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm font-medium text-gray-500 mb-1">Total Stock Value</p>
-            <p class="text-3xl font-bold text-gray-900">{{ isset($businessStats) ? '$' . number_format($businessStats['total_stock_value']) : '$0' }}</p>
-            <p class="text-sm text-green-600 mt-2">Current Inventory</p>
-          </div>
-          <div class="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-            </svg>
-          </div>
-        </div>
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
       <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
         <div class="flex items-center justify-between">
@@ -476,6 +462,7 @@
   </div>
 
   {{-- Recent Activity Section --}}
+  @if(auth()->user()->roles === 'admin')
   <div class="bg-white rounded-xl border border-gray-200 p-6">
     <div class="flex items-center justify-between mb-6">
       <div>
@@ -488,7 +475,7 @@
           @endif
         </p>
       </div>
-      @if(in_array(auth()->user()->roles, ['admin', 'manager', 'operator']))
+      @if(in_array(auth()->user()->roles, ['admin', 'operator']))
         <a href="{{ route('activities.index') }}" class="text-sm text-blue-600 hover:text-blue-500">
           View All →
         </a>
@@ -545,6 +532,7 @@
       @endif
     </div>
   </div>
+  @endif
 
 </div>
 @endsection
@@ -554,61 +542,53 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('stockChart');
-    if (ctx) {
-        const chartData = @json($chartData ?? []);
-        
-        new Chart(ctx, {
-            type: 'line',
-            data: chartData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Stock In vs Stock Out Trends'
-                    },
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        },
-                        title: {
-                            display: true,
-                            text: 'Number of Transactions'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Month'
-                        }
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
-                elements: {
-                    line: {
-                        tension: 0.4
-                    },
-                    point: {
-                        radius: 4,
-                        hoverRadius: 6
-                    }
-                }
+  const ctx = document.getElementById('stockChart');
+  if (!ctx) return;
+
+  const raw = @json($chartData ?? []);
+  const inArr  = (raw.datasets?.[0]?.data || []).map(Number);
+  const outArr = (raw.datasets?.[1]?.data || []).map(Number);
+
+  const totalIn  = inArr.reduce((a,b)=>a+(b||0), 0);
+  const totalOut = outArr.reduce((a,b)=>a+(b||0), 0);
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Stock In', 'Stock Out'],
+      datasets: [{
+        data: [totalIn, totalOut],
+        backgroundColor: ['rgb(34, 197, 94)', 'rgb(239, 68, 68)'], // hijau & merah
+        borderColor: '#ffffff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Distribusi Stock In vs Stock Out (6 bulan terakhir)'
+        },
+        legend: {
+          position: 'bottom'
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const value = ctx.raw ?? 0;
+              const total = (ctx.dataset.data || []).reduce((a,b)=>a+(b||0), 0);
+              const pct = total ? ((value/total)*100).toFixed(1) : 0;
+              return `${ctx.label}: ${value} (${pct}%)`;
             }
-        });
+          }
+        }
+      }
     }
+  });
 });
 </script>
 @endpush
 @endif
+

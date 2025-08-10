@@ -61,8 +61,8 @@
     </a>
 
     @auth
-      {{-- Activity History for admins, managers, and operators --}}
-      @if(in_array(auth()->user()->roles, ['admin', 'manager', 'operator']))
+      {{-- Activity History for admins --}}
+      @if(in_array(auth()->user()->roles, ['admin']))
         {{-- Divider --}}
         <div class="pt-4 pb-2">
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
@@ -103,8 +103,8 @@
         </a>
       @endif
 
-      {{-- Inventory Management for all roles --}}
-      @if(in_array(auth()->user()->roles, ['admin', 'operator', 'owner']))
+      {{-- Inventory Management for operator --}}
+      @if(in_array(auth()->user()->roles, ['operator']))
         {{-- Divider --}}
         <div class="pt-4 pb-2">
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
@@ -160,6 +160,24 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
           </svg>
           <span>Stock Out</span>
+        </a>
+      @endif
+
+      @if(auth()->user()->roles === 'owner' || auth()->user()->roles === 'admin')
+      {{-- Divider --}}
+        <div class="pt-4 pb-2">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
+            Inventory Management
+          </p>
+        </div>
+        {{-- Products --}}
+        <a href="{{ route('products.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('products.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+          </svg>
+          <span>Products</span>
         </a>
       @endif
 
