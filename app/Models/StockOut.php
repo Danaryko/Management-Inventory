@@ -6,13 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 class StockOut extends Model
 {
     protected $fillable = [
-        'product_id',
-        'quantity',
-        'date_out',
+        'reference_number',
+        'user_id',
+        'date',
+        'total_amount',
+        'notes',
     ];
 
-    public function product()
+    protected $casts = [
+        'date' => 'date',
+        'total_amount' => 'decimal:2',
+    ];
+
+    public function user()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(StockOutItem::class);
+    }
+
+    public function products()
+    {
+        return $this->hasManyThrough(Product::class, StockOutItem::class);
     }
 }

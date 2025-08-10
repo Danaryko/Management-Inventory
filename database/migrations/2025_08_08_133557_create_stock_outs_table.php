@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('stock_outs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->string('reference_number');
             $table->unsignedBigInteger('user_id')->nullable(); // siapa yang input
-            $table->integer('quantity');
-            $table->date('date_out');
-            $table->string('description')->nullable(); // misalnya: sold, damaged, etc.
+            $table->date('date');
+            $table->decimal('total_amount', 12, 2)->default(0);
+            $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }

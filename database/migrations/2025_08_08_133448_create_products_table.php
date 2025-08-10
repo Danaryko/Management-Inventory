@@ -13,13 +13,17 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id(); // product_id
-            $table->string('product_name');
+            $table->string('name');
             $table->unsignedBigInteger('category_id');
+            $table->text('description')->nullable();
+            $table->string('sku')->unique();
             $table->string('brand')->nullable();
             $table->string('size')->nullable();
             $table->string('color')->nullable();
-            $table->integer('price');
+            $table->decimal('price', 10, 2);
             $table->integer('stock_quantity')->default(0);
+            $table->integer('min_stock_level')->default(0);
+            $table->string('image')->nullable();
             $table->timestamps();
             // Foreign key constraint
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
