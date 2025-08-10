@@ -5,11 +5,8 @@
 
 @section('content')
 <div x-data="{ 
-  showCreateModal: false, 
   showDeleteModal: false, 
-  userToDelete: null,
-  userToEdit: null,
-  showEditModal: false
+  userToDelete: null
 }" class="space-y-6">
 
   {{-- Header with Search and Create Button --}}
@@ -41,15 +38,15 @@
         </form>
         
         {{-- Create User Button --}}
-        <button 
-          @click="showCreateModal = true"
+        <a 
+          href="{{ route('users.create') }}"
           class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2 whitespace-nowrap"
         >
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
           </svg>
           Tambah User
-        </button>
+        </a>
       </div>
     </div>
   </div>
@@ -104,11 +101,10 @@
                   </a>
                   
                   {{-- Edit Button --}}
-                  <button 
-                    @click="userToEdit = {{ $user->toJson() }}; showEditModal = true"
-                    class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors">
+                  <a href="{{ route('users.edit', $user) }}" 
+                     class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors">
                     Edit
-                  </button>
+                  </a>
                   
                   {{-- Delete Button (not for current user) --}}
                   @if($user->id !== auth()->id())
@@ -156,146 +152,6 @@
         @endif
       </div>
     @endif
-  </div>
-
-  {{-- Create User Modal --}}
-  <div x-show="showCreateModal" 
-       x-transition:enter="ease-out duration-300"
-       x-transition:enter-start="opacity-0"
-       x-transition:enter-end="opacity-100"
-       x-transition:leave="ease-in duration-200"
-       x-transition:leave-start="opacity-100"
-       x-transition:leave-end="opacity-0"
-       class="fixed inset-0 z-50 overflow-y-auto" 
-       style="display: none;">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-      
-      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-        <form method="POST" action="{{ route('users.store') }}">
-          @csrf
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="w-full">
-                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Tambah User Baru</h3>
-                
-                <div class="space-y-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                    <input type="text" name="name" required
-                           class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent">
-                  </div>
-                  
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" name="email" required
-                           class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent">
-                  </div>
-                  
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                    <input type="password" name="password" required
-                           class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent">
-                  </div>
-                  
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                    <select name="role" required
-                            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent">
-                      <option value="">Pilih Role</option>
-                      <option value="admin">Admin</option>
-                      <option value="staff">Staff</option>
-                      <option value="user">User</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button type="submit"
-                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-900 text-base font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 sm:ml-3 sm:w-auto sm:text-sm">
-              Simpan
-            </button>
-            <button @click="showCreateModal = false" type="button"
-                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-              Batal
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  {{-- Edit User Modal --}}
-  <div x-show="showEditModal" 
-       x-transition:enter="ease-out duration-300"
-       x-transition:enter-start="opacity-0"
-       x-transition:enter-end="opacity-100"
-       x-transition:leave="ease-in duration-200"
-       x-transition:leave-start="opacity-100"
-       x-transition:leave-end="opacity-0"
-       class="fixed inset-0 z-50 overflow-y-auto" 
-       style="display: none;">
-    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
-      
-      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-        <form method="POST" :action="userToEdit ? `/users/${userToEdit.id}` : ''">
-          @csrf
-          @method('PUT')
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="w-full">
-                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Edit User</h3>
-                
-                <div class="space-y-4">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                    <input type="text" name="name" :value="userToEdit?.name" required
-                           class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent">
-                  </div>
-                  
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" name="email" :value="userToEdit?.email" required
-                           class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent">
-                  </div>
-                  
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Password (kosongkan jika tidak ingin mengubah)</label>
-                    <input type="password" name="password"
-                           class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent">
-                  </div>
-                  
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                    <select name="role" required
-                            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-transparent">
-                      <option value="admin" :selected="userToEdit?.role === 'admin'">Admin</option>
-                      <option value="staff" :selected="userToEdit?.role === 'staff'">Staff</option>
-                      <option value="user" :selected="userToEdit?.role === 'user'">User</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button type="submit"
-                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-900 text-base font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 sm:ml-3 sm:w-auto sm:text-sm">
-              Update
-            </button>
-            <button @click="showEditModal = false; userToEdit = null" type="button"
-                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-              Batal
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
   </div>
 
   {{-- Delete Confirmation Modal --}}
