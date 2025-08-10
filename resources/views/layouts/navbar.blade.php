@@ -28,9 +28,9 @@
             <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
             <p class="text-xs text-gray-500">
               <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full
-                {{ auth()->user()->role === 'admin' ? 'bg-red-100 text-red-800' : 
-                   (auth()->user()->role === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
-                {{ ucfirst(auth()->user()->role) }}
+                {{ auth()->user()->roles === 'admin' ? 'bg-red-100 text-red-800' : 
+                   (auth()->user()->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+                {{ ucfirst(auth()->user()->roles) }}
               </span>
             </p>
           </div>

@@ -55,12 +55,12 @@
       <div class="flex items-center justify-between">
         <div>
           <p class="text-sm font-medium text-gray-500 mb-1">Role Anda</p>
-          <p class="text-3xl font-bold text-gray-900 capitalize">{{ auth()->user()->role }}</p>
+          <p class="text-3xl font-bold text-gray-900 capitalize">{{ auth()->user()->roles }}</p>
           <div class="mt-2">
             <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
-              {{ auth()->user()->role === 'admin' ? 'bg-red-100 text-red-800' : 
-                 (auth()->user()->role === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
-              {{ ucfirst(auth()->user()->role) }}
+              {{ auth()->user()->roles === 'admin' ? 'bg-red-100 text-red-800' : 
+                 (auth()->user()->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+              {{ ucfirst(auth()->user()->roles) }}
             </span>
           </div>
         </div>
@@ -122,7 +122,7 @@
         </div>
       </a>
 
-      @if(auth()->user()->role === 'admin')
+      @if(auth()->user()->roles === 'admin')
         {{-- Manage Users --}}
         <a href="{{ route('users.index') }}" 
            class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group">

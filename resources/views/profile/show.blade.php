@@ -23,9 +23,9 @@
           <p class="text-gray-300 mt-1">{{ auth()->user()->email }}</p>
           <div class="mt-3">
             <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full
-              {{ auth()->user()->role === 'admin' ? 'bg-red-100 text-red-800' : 
-                 (auth()->user()->role === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
-              {{ ucfirst(auth()->user()->role) }}
+              {{ auth()->user()->roles === 'admin' ? 'bg-red-100 text-red-800' : 
+                 (auth()->user()->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+              {{ ucfirst(auth()->user()->roles) }}
             </span>
           </div>
         </div>
@@ -64,9 +64,9 @@
           <dt class="text-sm font-medium text-gray-500 mb-2">Role/Jabatan</dt>
           <dd>
             <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full
-              {{ auth()->user()->role === 'admin' ? 'bg-red-100 text-red-800' : 
-                 (auth()->user()->role === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
-              {{ ucfirst(auth()->user()->role) }}
+              {{ auth()->user()->roles === 'admin' ? 'bg-red-100 text-red-800' : 
+                 (auth()->user()->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+              {{ ucfirst(auth()->user()->roles) }}
             </span>
           </dd>
         </div>
@@ -175,7 +175,7 @@
         </div>
       </a>
 
-      @if(auth()->user()->role === 'admin')
+      @if(auth()->user()->roles === 'admin')
         <a href="{{ route('users.index') }}" 
            class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group">
           <div class="h-10 w-10 bg-blue-200 rounded-lg flex items-center justify-center group-hover:bg-blue-300 transition-colors">

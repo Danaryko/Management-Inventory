@@ -29,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // User Management (hanya admin)
-    Route::middleware('role:admin')->group(function () {
+    Route::middleware('roles:admin')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::get('/users/create', fn() => view('users.create'))->name('users.create');
         Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');

@@ -38,7 +38,7 @@ class UserController extends Controller
             'name'     => ['required','string','max:255'],
             'email'    => ['required','email','max:255','unique:users,email'],
             'password' => ['required','min:6'],
-            'role'     => ['required', Rule::in(['admin','staff','user'])],
+            'roles'     => ['required', Rule::in(['admin','owner','operator'])],
         ]);
 
         $data['password'] = Hash::make($data['password']);
@@ -57,7 +57,7 @@ class UserController extends Controller
             'name'     => ['sometimes','string','max:255'],
             'email'    => ['sometimes','email','max:255', Rule::unique('users','email')->ignore($user->id)],
             'password' => ['sometimes','nullable','min:6'],
-            'role'     => ['sometimes', Rule::in(['admin','staff','user'])],
+            'roles'     => ['sometimes', Rule::in(['admin','owner','operator'])],
         ]);
 
         if (array_key_exists('password', $data)) {
@@ -79,10 +79,10 @@ class UserController extends Controller
     public function updateRole(Request $request, User $user)
     {
         $data = $request->validate([
-            'role' => ['required', Rule::in(['admin','staff','user'])],
+            'roles' => ['required', Rule::in(['admin','staff','user'])],
         ]);
 
-        $user->update(['role' => $data['role']]);
+        $user->update(['roles' => $data['roles']]);
 
         return back()->with('status', 'Role user berhasil diubah.');
     }

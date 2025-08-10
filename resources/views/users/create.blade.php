@@ -125,21 +125,21 @@
 
       {{-- Role Field --}}
       <div>
-        <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
+        <label for="roles" class="block text-sm font-medium text-gray-700 mb-2">
           Role/Jabatan <span class="text-red-500">*</span>
         </label>
         <select 
-          id="role"
-          name="role" 
+          id="roles"
+          name="roles" 
           required
-          class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm @error('role') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
+          class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm @error('roles') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
         >
           <option value="">Pilih Role</option>
-          <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
-          <option value="staff" {{ old('role') === 'staff' ? 'selected' : '' }}>Staff</option>
-          <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User</option>
+          <option value="admin" {{ old('rolse') === 'admin' ? 'selected' : '' }}>Admin</option>
+          <option value="staff" {{ old('roles') === 'staff' ? 'selected' : '' }}>Staff</option>
+          <option value="user" {{ old('roles') === 'user' ? 'selected' : '' }}>User</option>
         </select>
-        @error('role')
+        @error('roles')
           <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
         @enderror
         <p class="mt-1 text-sm text-gray-500">

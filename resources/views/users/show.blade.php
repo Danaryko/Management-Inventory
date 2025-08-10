@@ -58,9 +58,9 @@
           <p class="text-sm text-gray-600">{{ $user->email }}</p>
           <div class="mt-1">
             <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
-              {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : 
-                 ($user->role === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
-              {{ ucfirst($user->role) }}
+              {{ $user->roles === 'admin' ? 'bg-red-100 text-red-800' : 
+                 ($user->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+              {{ ucfirst($user->roles) }}
             </span>
           </div>
         </div>
@@ -84,9 +84,9 @@
           <dt class="text-sm font-medium text-gray-500">Role</dt>
           <dd class="mt-1">
             <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
-              {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : 
-                 ($user->role === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
-              {{ ucfirst($user->role) }}
+              {{ $user->roles === 'admin' ? 'bg-red-100 text-red-800' : 
+                 ($user->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+              {{ ucfirst($user->roles) }}
             </span>
           </dd>
         </div>

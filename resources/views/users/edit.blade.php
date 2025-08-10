@@ -134,28 +134,28 @@
 
       {{-- Role Field --}}
       <div>
-        <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
+        <label for="roles" class="block text-sm font-medium text-gray-700 mb-2">
           Role/Jabatan <span class="text-red-500">*</span>
         </label>
         <select 
-          id="role"
-          name="role" 
+          id="roles"
+          name="roles" 
           required
-          class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm @error('role') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
+          class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm @error('roles') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
         >
-          <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
-          <option value="staff" {{ old('role', $user->role) === 'staff' ? 'selected' : '' }}>Staff</option>
-          <option value="user" {{ old('role', $user->role) === 'user' ? 'selected' : '' }}>User</option>
+          <option value="admin" {{ old('roles', $user->roles) === 'admin' ? 'selected' : '' }}>Admin</option>
+          <option value="staff" {{ old('roles', $user->roles === 'staff' ? 'selected' : '' }}>Staff</option>
+          <option value="user" {{ old('roles', $user->roles) === 'user' ? 'selected' : '' }}>User</option>
         </select>
-        @error('role')
+        @error('roles')
           <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
         @enderror
         <p class="mt-1 text-sm text-gray-500">
           Role saat ini: 
           <span class="inline-flex px-2 py-0.5 text-xs font-semibold rounded-full
-            {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : 
-               ($user->role === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
-            {{ ucfirst($user->role) }}
+            {{ $user->roles === 'admin' ? 'bg-red-100 text-red-800' : 
+               ($user->roles === 'staff' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800') }}">
+            {{ ucfirst($user->roles) }}
           </span>
         </p>
       </div>

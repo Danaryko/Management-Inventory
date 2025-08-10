@@ -61,7 +61,7 @@
     </a>
 
     @auth
-      @if(auth()->user()->role === 'admin')
+      @if(auth()->user()->roles === 'admin')
         {{-- Divider --}}
         <div class="pt-4 pb-2">
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
