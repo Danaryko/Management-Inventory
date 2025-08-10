@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\RoleMiddleware;
+use App\Http\Middleware\ActivityLogMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role'  => RoleMiddleware::class,
             'roles' => RoleMiddleware::class, // optional alias plural
+        ]);
+
+        // Add activity logging to web middleware group
+        $middleware->web(append: [
+            ActivityLogMiddleware::class,
         ]);
 
     })

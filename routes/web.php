@@ -3,6 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\StockInController;
+use App\Http\Controllers\StockOutController;
+use App\Http\Controllers\ActivityController;
 use App\Models\User;
 
 // TAMU: form login & register
@@ -38,5 +44,38 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
         Route::post('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
+    });
+
+    // Operator Features
+    Route::middleware('roles:operator,admin')->group(function () {
+        // Categories Management
+        Route::resource('categories', CategoryController::class);
+        
+        // Products Management
+        Route::resource('products', ProductController::class);
+        
+        // Suppliers Management
+        Route::resource('suppliers', SupplierController::class);
+        
+        // Stock In Management
+        Route::resource('stock-ins', StockInController::class);
+        
+        // Stock Out Management
+        Route::resource('stock-outs', StockOutController::class);
+        
+        // Activity History (personal)
+        Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+    });
+
+    // Owner Features (will be added in Phase 3)
+    Route::middleware('roles:owner,admin')->group(function () {
+        // Enhanced dashboard with charts
+        // Stock management overview
+        // Reports
+    });
+
+    // Admin Features (will be added in Phase 4)
+    Route::middleware('roles:admin')->group(function () {
+        // System-wide activity logs
     });
 });
