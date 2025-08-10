@@ -1,0 +1,281 @@
+/* Enhanced Activity History and Dashboard Styles */
+
+/* Auto-refresh indicator animation */
+.auto-refresh-active {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Enhanced table hover effects */
+.activities-table tbody tr:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Activity type icons with animation */
+.activity-icon {
+    transition: all 0.3s ease;
+}
+
+.activity-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Loading states */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #f3f4f6;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Enhanced filter section */
+.filter-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+}
+
+/* Dashboard cards hover effect */
+.dashboard-card {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.dashboard-card:hover::before {
+    left: 100%;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Role-based color schemes */
+.role-admin {
+    --role-color: #dc2626;
+    --role-bg: #fef2f2;
+}
+
+.role-owner {
+    --role-color: #2563eb;
+    --role-bg: #eff6ff;
+}
+
+.role-manager {
+    --role-color: #059669;
+    --role-bg: #ecfdf5;
+}
+
+.role-operator {
+    --role-color: #d97706;
+    --role-bg: #fffbeb;
+}
+
+/* Quick actions grid responsive improvements */
+.quick-actions-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+@media (max-width: 640px) {
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Enhanced mobile responsiveness for activities table */
+@media (max-width: 768px) {
+    .activities-table {
+        font-size: 0.875rem;
+    }
+    
+    .activities-table td {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .activities-table .hidden-mobile {
+        display: none;
+    }
+}
+
+/* Status indicators with animation */
+.status-indicator {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.status-indicator::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    animation: pulse 2s infinite;
+}
+
+.status-completed::before {
+    background-color: #10b981;
+}
+
+.status-pending::before {
+    background-color: #f59e0b;
+}
+
+.status-failed::before {
+    background-color: #ef4444;
+}
+
+/* Export button loading state */
+.export-btn {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.export-btn.loading {
+    color: transparent;
+}
+
+.export-btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Dashboard welcome section enhancements */
+.welcome-gradient {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #111827 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.5;
+}
+
+/* Activity filters enhancement */
+.filter-input {
+    transition: all 0.3s ease;
+    border: 1px solid #d1d5db;
+}
+
+.filter-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Recent activities timeline effect */
+.activity-timeline {
+    position: relative;
+}
+
+.activity-timeline::before {
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #3b82f6, transparent);
+}
+
+.activity-item {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #3b82f6;
+    border: 2px solid #ffffff;
+}
+
+/* Print styles for activity reports */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .activities-table {
+        font-size: 12px;
+    }
+    
+    .dashboard-card {
+        break-inside: avoid;
+    }
+    
+    body {
+        font-size: 12px;
+        line-height: 1.3;
+    }
+}

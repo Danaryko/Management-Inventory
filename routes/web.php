@@ -9,6 +9,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\StockInController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\DashboardController;
 use App\Models\User;
 
 // TAMU: form login & register
@@ -23,11 +24,7 @@ Route::middleware('guest')->group(function () {
 // AUTH: dashboard, profile, logout
 Route::middleware(['auth'])->group(function () {
     Route::get('/', fn() => redirect()->route('dashboard'));
-    Route::get('/dashboard', function () {
-        // contoh data untuk kartu:
-        $totalUsers = \App\Models\User::count();
-        return view('dashboard', compact('totalUsers'));
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // 'me' Anda sudah diubah ke 'profile'
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
@@ -44,8 +41,12 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
         Route::post('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
-        // Activity History (personal)
+    });
+
+    // Activity History (Admin, Manager, Operator access)
+    Route::middleware('roles:admin,manager,operator')->group(function () {
         Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+        Route::get('/activities/export', [ActivityController::class, 'export'])->name('activities.export');
     });
 
     // Inventory Management Features (Admin, Operator, Owner)
