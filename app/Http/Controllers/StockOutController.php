@@ -7,7 +7,8 @@ use App\Models\StockOutItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class StockOutController extends Controller
 {
@@ -285,9 +286,20 @@ class StockOutController extends Controller
         $dateFrom = $request->date_from ?? now()->startOfMonth()->format('Y-m-d');
         $dateTo = $request->date_to ?? now()->endOfMonth()->format('Y-m-d');
 
-        $pdf = \PDF::loadView('reports.stock-out-pdf', compact('stockOuts', 'totalAmount', 'totalItems', 'dateFrom', 'dateTo'));
+        // Generate PDF using DomPDF
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $pdf = new Dompdf($options);
         
-        return $pdf->download('stock-out-report-' . $dateFrom . '-to-' . $dateTo . '.pdf');
+        $html = view('reports.stock-out-pdf', compact('stockOuts', 'totalAmount', 'totalItems', 'dateFrom', 'dateTo'))->render();
+        $pdf->loadHtml($html);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        
+        return response($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="stock-out-report-' . $dateFrom . '-to-' . $dateTo . '.pdf"'
+        ]);
     }
 
     /**
