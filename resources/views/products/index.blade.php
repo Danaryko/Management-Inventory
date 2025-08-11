@@ -6,7 +6,7 @@
 @section('content')
 <div class="p-6 max-w-7xl mx-auto">
   {{-- Header --}}
-  @if(auth()->user()->roles === 'operator')
+  @if(auth()->user()->roles === 'staff')
   <div class="mb-6">
     <div class="flex justify-between items-center">
       <div>
@@ -92,7 +92,7 @@
   </div>
 
   {{-- Products Grid --}}
-  @if(auth()->user()->roles === 'operator')
+  @if(auth()->user()->roles === 'staff')
   <div class="bg-white rounded-lg shadow">
     @if($products->count() > 0)
       <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
@@ -125,14 +125,6 @@
               <p class="text-xs text-gray-500 mb-2">{{ $product->category->name }}</p>
               
               <div class="space-y-1 text-xs text-gray-600">
-                <div class="flex justify-between">
-                  <span>SKU:</span>
-                  <span class="font-medium">{{ $product->sku }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span>Price:</span>
-                  <span class="font-medium">${{ number_format($product->price, 2) }}</span>
-                </div>
                 <div class="flex justify-between">
                   <span>Stock:</span>
                   <span class="font-medium {{ $product->isLowStock() ? 'text-red-600' : 'text-green-600' }}">
@@ -218,14 +210,6 @@
               
               <div class="space-y-1 text-xs text-gray-600">
                 <div class="flex justify-between">
-                  <span>SKU:</span>
-                  <span class="font-medium">{{ $product->sku }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span>Price:</span>
-                  <span class="font-medium">${{ number_format($product->price, 2) }}</span>
-                </div>
-                <div class="flex justify-between">
                   <span>Stock:</span>
                   <span class="font-medium {{ $product->isLowStock() ? 'text-red-600' : 'text-green-600' }}">
                     {{ $product->stock_quantity }} units
@@ -256,16 +240,6 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
         </svg>
         <h3 class="mt-2 text-sm font-medium text-gray-900">No products</h3>
-        <p class="mt-1 text-sm text-gray-500">Get started by creating a new product.</p>
-        <div class="mt-6">
-          <a href="{{ route('products.create') }}" 
-             class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-            </svg>
-            New Product
-          </a>
-        </div>
       </div>
     @endif
   </div>

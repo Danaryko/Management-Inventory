@@ -18,7 +18,6 @@ class ProductController extends Controller
 
         if ($request->has('search') && $request->search) {
             $query->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('sku', 'like', '%' . $request->search . '%')
                   ->orWhere('description', 'like', '%' . $request->search . '%');
         }
 
@@ -54,19 +53,17 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
-            'sku' => 'required|string|max:255|unique:products',
             'brand' => 'nullable|string|max:255',
             'size' => 'nullable|string|max:255',
             'color' => 'nullable|string|max:255',
-            'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
             'min_stock_level' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->only([
-            'name', 'category_id', 'description', 'sku', 'brand', 
-            'size', 'color', 'price', 'stock_quantity', 'min_stock_level'
+            'name', 'category_id', 'description', 'brand', 
+            'size', 'color', 'stock_quantity', 'min_stock_level'
         ]);
 
         if ($request->hasFile('image')) {
@@ -106,19 +103,17 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
-            'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
             'brand' => 'nullable|string|max:255',
             'size' => 'nullable|string|max:255',
             'color' => 'nullable|string|max:255',
-            'price' => 'required|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
             'min_stock_level' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->only([
-            'name', 'category_id', 'description', 'sku', 'brand', 
-            'size', 'color', 'price', 'stock_quantity', 'min_stock_level'
+            'name', 'category_id', 'description', 'brand', 
+            'size', 'color', 'stock_quantity', 'min_stock_level'
         ]);
 
         if ($request->hasFile('image')) {

@@ -6,7 +6,7 @@
 @section('content')
 <div class="p-6 max-w-6xl mx-auto">
   {{-- Header --}}
-  @if(auth()->user()->roles === 'operator')
+  @if(auth()->user()->roles === 'staff')
   <div class="mb-6">
     <div class="flex items-center gap-4">
       <a href="{{ route('products.index') }}" 
@@ -91,11 +91,7 @@
               </span>
             </dd>
           </div>
-          <div>
-            <dt class="text-sm font-medium text-gray-500">SKU</dt>
-            <dd class="mt-1 text-sm text-gray-900 font-mono">{{ $product->sku }}</dd>
-          </div>
-          <div>
+          <div class="md:col-span-2">
             <dt class="text-sm font-medium text-gray-500">Brand</dt>
             <dd class="mt-1 text-sm text-gray-900">{{ $product->brand ?: 'Not specified' }}</dd>
           </div>
@@ -114,14 +110,10 @@
         </dl>
       </div>
 
-      {{-- Pricing & Stock --}}
+      {{-- Stock --}}
       <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Pricing & Stock</h2>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Stock</h2>
         <dl class="grid md:grid-cols-3 gap-4">
-          <div>
-            <dt class="text-sm font-medium text-gray-500">Price</dt>
-            <dd class="mt-1 text-lg font-semibold text-gray-900">${{ number_format($product->price, 2) }}</dd>
-          </div>
           <div>
             <dt class="text-sm font-medium text-gray-500">Current Stock</dt>
             <dd class="mt-1">

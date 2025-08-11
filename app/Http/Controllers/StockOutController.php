@@ -59,7 +59,6 @@ class StockOutController extends Controller
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.sale_price' => 'required|numeric|min:0',
         ]);
 
         // Validate stock availability
@@ -73,32 +72,22 @@ class StockOutController extends Controller
         }
 
         DB::transaction(function () use ($request) {
-            $totalAmount = 0;
-
-            // Calculate total amount
-            foreach ($request->items as $item) {
-                $totalAmount += $item['quantity'] * $item['sale_price'];
-            }
 
             // Create stock out record
             $stockOut = StockOut::create([
                 'reference_number' => $request->reference_number,
                 'user_id' => auth()->id(),
                 'date' => $request->date,
-                'total_amount' => $totalAmount,
                 'notes' => $request->notes,
             ]);
 
             // Create stock out items and update product stock
             foreach ($request->items as $item) {
-                $subtotal = $item['quantity'] * $item['sale_price'];
                 
                 StockOutItem::create([
                     'stock_out_id' => $stockOut->id,
                     'product_id' => $item['product_id'],
                     'quantity' => $item['quantity'],
-                    'sale_price' => $item['sale_price'],
-                    'subtotal' => $subtotal,
                 ]);
 
                 // Update product stock
@@ -143,7 +132,6 @@ class StockOutController extends Controller
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.sale_price' => 'required|numeric|min:0',
         ]);
 
         DB::transaction(function () use ($request, $stockOut) {
@@ -164,31 +152,20 @@ class StockOutController extends Controller
             // Delete old items
             $stockOut->items()->delete();
 
-            $totalAmount = 0;
-
-            // Calculate total amount
-            foreach ($request->items as $item) {
-                $totalAmount += $item['quantity'] * $item['sale_price'];
-            }
-
             // Update stock out record
             $stockOut->update([
                 'reference_number' => $request->reference_number,
                 'date' => $request->date,
-                'total_amount' => $totalAmount,
                 'notes' => $request->notes,
             ]);
 
             // Create new stock out items and update product stock
             foreach ($request->items as $item) {
-                $subtotal = $item['quantity'] * $item['sale_price'];
                 
                 StockOutItem::create([
                     'stock_out_id' => $stockOut->id,
                     'product_id' => $item['product_id'],
                     'quantity' => $item['quantity'],
-                    'sale_price' => $item['sale_price'],
-                    'subtotal' => $subtotal,
                 ]);
 
                 // Update product stock
@@ -247,12 +224,11 @@ class StockOutController extends Controller
         }
 
         $stockOuts = $query->orderBy('date', 'desc')->get();
-        $totalAmount = $stockOuts->sum('total_amount');
         $totalItems = $stockOuts->sum(function($stockOut) {
             return $stockOut->items->sum('quantity');
         });
 
-        return view('reports.stock-out', compact('stockOuts', 'totalAmount', 'totalItems'));
+        return view('reports.stock-out', compact('stockOuts', 'totalItems'));
     }
 
     /**
@@ -278,7 +254,6 @@ class StockOutController extends Controller
         }
 
         $stockOuts = $query->orderBy('date', 'desc')->get();
-        $totalAmount = $stockOuts->sum('total_amount');
         $totalItems = $stockOuts->sum(function($stockOut) {
             return $stockOut->items->sum('quantity');
         });
@@ -291,7 +266,7 @@ class StockOutController extends Controller
         $options->set('defaultFont', 'Arial');
         $pdf = new Dompdf($options);
         
-        $html = view('reports.stock-out-pdf', compact('stockOuts', 'totalAmount', 'totalItems', 'dateFrom', 'dateTo'))->render();
+        $html = view('reports.stock-out-pdf', compact('stockOuts', 'totalItems', 'dateFrom', 'dateTo'))->render();
         $pdf->loadHtml($html);
         $pdf->setPaper('A4', 'portrait');
         $pdf->render();
@@ -303,7 +278,7 @@ class StockOutController extends Controller
     }
 
     /**
-     * Display stock out history for operator role
+     * Display stock out history for staff role
      */
     public function history(Request $request)
     {
@@ -321,6 +296,6 @@ class StockOutController extends Controller
 
         $stockOuts = $query->latest()->paginate(10);
 
-        return view('operator.stock-out-history', compact('stockOuts'));
+        return view('staff.stock-out-history', compact('stockOuts'));
     }
 }

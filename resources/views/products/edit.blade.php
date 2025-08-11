@@ -70,23 +70,6 @@
             @enderror
           </div>
 
-          {{-- SKU --}}
-          <div>
-            <label for="sku" class="block text-sm font-medium text-gray-700 mb-2">
-              SKU *
-            </label>
-            <input type="text" 
-                   id="sku" 
-                   name="sku" 
-                   value="{{ old('sku', $product->sku) }}"
-                   required
-                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('sku') border-red-500 @enderror"
-                   placeholder="Enter SKU">
-            @error('sku')
-              <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-          </div>
-
           {{-- Description --}}
           <div>
             <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
@@ -154,30 +137,6 @@
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
               @enderror
             </div>
-          </div>
-
-          {{-- Price --}}
-          <div>
-            <label for="price" class="block text-sm font-medium text-gray-700 mb-2">
-              Price *
-            </label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span class="text-gray-500 sm:text-sm">$</span>
-              </div>
-              <input type="number" 
-                     id="price" 
-                     name="price" 
-                     value="{{ old('price', $product->price) }}"
-                     step="0.01"
-                     min="0"
-                     required
-                     class="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('price') border-red-500 @enderror"
-                     placeholder="0.00">
-            </div>
-            @error('price')
-              <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
           </div>
 
           {{-- Stock Information --}}

@@ -31,22 +31,8 @@
                id="search"
                name="search" 
                value="{{ request('search') }}"
-               placeholder="Reference number or supplier..." 
+               placeholder="Reference number..." 
                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-      </div>
-      
-      <div>
-        <label for="supplier_id" class="block text-sm font-medium text-gray-700 mb-1">Supplier</label>
-        <select name="supplier_id" 
-                id="supplier_id"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
-          <option value="">All Suppliers</option>
-          @foreach($suppliers as $supplier)
-            <option value="{{ $supplier->id }}" {{ request('supplier_id') == $supplier->id ? 'selected' : '' }}>
-              {{ $supplier->name }}
-            </option>
-          @endforeach
-        </select>
       </div>
 
       <div>
@@ -75,7 +61,7 @@
           </svg>
           Filter
         </button>
-        @if(request()->hasAny(['search', 'supplier_id', 'date_from', 'date_to']))
+        @if(request()->hasAny(['search', 'date_from', 'date_to']))
           <a href="{{ route('stock-ins.index') }}" 
              class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
             Clear
@@ -94,9 +80,7 @@
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">By</th>
               <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
@@ -114,20 +98,9 @@
                   {{ $stockIn->date->format('M d, Y') }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  @if($stockIn->supplier)
-                    <div class="text-sm text-gray-900">{{ $stockIn->supplier->name }}</div>
-                    <div class="text-sm text-gray-500">{{ $stockIn->supplier->contact_person }}</div>
-                  @else
-                    <span class="text-sm text-gray-500">No supplier</span>
-                  @endif
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                     {{ $stockIn->items->count() }} items
                   </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  ${{ number_format($stockIn->total_amount, 2) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {{ $stockIn->user->name }}

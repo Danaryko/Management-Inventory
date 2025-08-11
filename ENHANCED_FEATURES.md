@@ -18,7 +18,7 @@ This implementation provides a comprehensive enhancement to the Management Inven
 - **Status Indicators**: Color-coded status indicators with animations
 
 #### Technical Details:
-- Uses role-based access (admin sees all, operators see only their own activities)
+- Uses role-based access (admin sees all, staffs see only their own activities)
 - AJAX-powered auto-refresh without page reload
 - Partial view support for table body updates
 - Enhanced pagination with query parameter preservation
@@ -46,7 +46,7 @@ This implementation provides a comprehensive enhancement to the Management Inven
 - Team management tools
 - Task overview widgets
 
-**Operator Dashboard:**
+**staff Dashboard:**
 - Personal activity statistics
 - Individual performance metrics
 - Quick operational actions
@@ -83,7 +83,7 @@ This implementation provides a comprehensive enhancement to the Management Inven
 
 ### 5. Enhanced Sidebar Navigation (`resources/views/layouts/sidebar.blade.php`)
 - **Role-based navigation**: Different menu items based on user permissions
-- **Activity History access**: Available for admin, manager, and operator roles
+- **Activity History access**: Available for admin, manager, and staff roles
 - **Visual indicators**: Active page highlighting and role-specific icons
 - **Mobile optimization**: Collapsible sidebar for mobile devices
 
@@ -110,8 +110,8 @@ This implementation provides a comprehensive enhancement to the Management Inven
 
 ### Routes Updated (`routes/web.php`)
 ```php
-// Activity History (Admin, Manager, Operator access)
-Route::middleware('roles:admin,manager,operator')->group(function () {
+// Activity History (Admin, Manager, staff access)
+Route::middleware('roles:admin,manager,staff')->group(function () {
     Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
     Route::get('/activities/export', [ActivityController::class, 'export'])->name('activities.export');
 });
@@ -146,7 +146,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 3. Export team activity reports
 4. Monitor department metrics
 
-### For Operators:
+### For staffs:
 1. View personal activity history
 2. Track individual performance
 3. Export personal activity data
@@ -204,7 +204,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 ## Testing Recommendations
 
 ### Manual Testing:
-1. Test all user roles (admin, owner, manager, operator)
+1. Test all user roles (admin, owner, manager, staff)
 2. Verify export functionality works correctly
 3. Test auto-refresh feature
 4. Validate mobile responsiveness

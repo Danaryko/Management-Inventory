@@ -21,7 +21,7 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email'=> $data['email'],
             'password' => $data['password'],
-            'roles' => 'admin', // role publik default 'operator'
+            'roles' => 'admin', // role publik default 'staff'
         ]);
 
         // $token = $user->createToken('auth')->plainTextToken;

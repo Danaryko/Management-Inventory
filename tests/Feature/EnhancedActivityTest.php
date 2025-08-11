@@ -18,7 +18,7 @@ class EnhancedActivityTest extends TestCase
         // Create test users with different roles
         $this->admin = User::factory()->create(['roles' => 'admin']);
         $this->manager = User::factory()->create(['roles' => 'manager']);
-        $this->operator = User::factory()->create(['roles' => 'operator']);
+        $this->staff = User::factory()->create(['roles' => 'staff']);
         $this->owner = User::factory()->create(['roles' => 'owner']);
     }
 
@@ -38,9 +38,9 @@ class EnhancedActivityTest extends TestCase
         $response->assertViewIs('activities.index');
     }
 
-    public function test_operator_can_access_activity_history()
+    public function test_staff_can_access_activity_history()
     {
-        $response = $this->actingAs($this->operator)->get('/activities');
+        $response = $this->actingAs($this->staff)->get('/activities');
         
         $response->assertStatus(200);
         $response->assertViewIs('activities.index');
@@ -58,7 +58,7 @@ class EnhancedActivityTest extends TestCase
         // Create activities from different users
         Activity::factory()->create(['user_id' => $this->admin->id, 'action' => 'created']);
         Activity::factory()->create(['user_id' => $this->manager->id, 'action' => 'updated']);
-        Activity::factory()->create(['user_id' => $this->operator->id, 'action' => 'deleted']);
+        Activity::factory()->create(['user_id' => $this->staff->id, 'action' => 'deleted']);
 
         $response = $this->actingAs($this->admin)->get('/activities');
         
@@ -67,17 +67,17 @@ class EnhancedActivityTest extends TestCase
         $this->assertEquals(3, $response->viewData('activities')->total());
     }
 
-    public function test_operator_sees_only_own_activities()
+    public function test_staff_sees_only_own_activities()
     {
         // Create activities from different users
         Activity::factory()->create(['user_id' => $this->admin->id, 'action' => 'created']);
         Activity::factory()->create(['user_id' => $this->manager->id, 'action' => 'updated']);
-        Activity::factory()->create(['user_id' => $this->operator->id, 'action' => 'deleted']);
+        Activity::factory()->create(['user_id' => $this->staff->id, 'action' => 'deleted']);
 
-        $response = $this->actingAs($this->operator)->get('/activities');
+        $response = $this->actingAs($this->staff)->get('/activities');
         
         $response->assertStatus(200);
-        // Operator should see only 1 activity (their own)
+        // staff should see only 1 activity (their own)
         $this->assertEquals(1, $response->viewData('activities')->total());
     }
 
@@ -155,9 +155,9 @@ class EnhancedActivityTest extends TestCase
         $response->assertViewHas('teamStats');
     }
 
-    public function test_role_based_dashboard_operator()
+    public function test_role_based_dashboard_staff()
     {
-        $response = $this->actingAs($this->operator)->get('/dashboard');
+        $response = $this->actingAs($this->staff)->get('/dashboard');
         
         $response->assertStatus(200);
         $response->assertViewIs('dashboard');

@@ -24,7 +24,7 @@
             @case('manager')
               Kelola tim dan operasional departemen Anda
               @break
-            @case('operator')
+            @case('staff')
               Kelola inventory dan operasional harian Anda
               @break
             @default
@@ -277,28 +277,8 @@
       </div>
     </div>
   @else
-    {{-- Operator/Staff Stats --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm font-medium text-gray-500 mb-1">My Activities</p>
-            <p class="text-3xl font-bold text-gray-900">{{ $myActivities ?? 0 }}</p>
-            <p class="text-sm text-green-600 mt-2">
-              <svg class="inline h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-              </svg>
-              Total Completed
-            </p>
-          </div>
-          <div class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-
+    {{-- staff/Staff Stats --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
         <div class="flex items-center justify-between">
           <div>
@@ -468,14 +448,14 @@
       <div>
         <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
         <p class="text-sm text-gray-600">
-          @if(auth()->user()->roles === 'operator')
+          @if(auth()->user()->roles === 'staff')
             Your recent activities in the system
           @else
             Latest activities in the system
           @endif
         </p>
       </div>
-      @if(in_array(auth()->user()->roles, ['admin', 'operator']))
+      @if(in_array(auth()->user()->roles, ['admin', 'staff']))
         <a href="{{ route('activities.index') }}" class="text-sm text-blue-600 hover:text-blue-500">
           View All →
         </a>
@@ -522,7 +502,7 @@
           </svg>
           <h3 class="mt-2 text-sm font-medium text-gray-900">No more activity</h3>
           <p class="mt-1 text-sm text-gray-500">
-            @if(auth()->user()->roles === 'operator')
+            @if(auth()->user()->roles === 'staff')
               Your activity will appear here as you use the system.
             @else
               Recent system activities will appear here.

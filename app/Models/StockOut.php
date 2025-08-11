@@ -9,13 +9,11 @@ class StockOut extends Model
         'reference_number',
         'user_id',
         'date',
-        'total_amount',
         'notes',
     ];
 
     protected $casts = [
         'date' => 'date',
-        'total_amount' => 'decimal:2',
     ];
 
     public function user()

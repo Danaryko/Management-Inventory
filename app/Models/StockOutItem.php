@@ -10,13 +10,9 @@ class StockOutItem extends Model
         'stock_out_id',
         'product_id',
         'quantity',
-        'sale_price',
-        'subtotal',
     ];
 
     protected $casts = [
-        'sale_price' => 'decimal:2',
-        'subtotal' => 'decimal:2',
     ];
 
     public function stockOut()

@@ -16,11 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('category_id');
             $table->text('description')->nullable();
-            $table->string('sku')->unique();
             $table->string('brand')->nullable();
             $table->string('size')->nullable();
             $table->string('color')->nullable();
-            $table->decimal('price', 10, 2);
             $table->integer('stock_quantity')->default(0);
             $table->integer('min_stock_level')->default(0);
             $table->string('image')->nullable();

@@ -138,10 +138,6 @@
             <span class="summary-label">Total Items:</span>
             <span>{{ number_format($totalItems) }} items</span>
         </div>
-        <div class="summary-row">
-            <span class="summary-label">Total Nilai:</span>
-            <span>Rp {{ number_format($totalAmount, 0, ',', '.') }}</span>
-        </div>
     </div>
 
     @if($stockIns->count() > 0)
@@ -151,10 +147,8 @@
                     <th style="width: 5%;">No</th>
                     <th style="width: 12%;">Tanggal</th>
                     <th style="width: 15%;">Referensi</th>
-                    <th style="width: 15%;">Supplier</th>
                     <th style="width: 25%;">Items</th>
                     <th style="width: 10%;">Qty</th>
-                    <th style="width: 18%;">Total Nilai</th>
                 </tr>
             </thead>
             <tbody>
@@ -163,7 +157,6 @@
                         <td class="text-center">{{ $index + 1 }}</td>
                         <td>{{ $stockIn->date->format('d/m/Y') }}</td>
                         <td>{{ $stockIn->reference_number }}</td>
-                        <td>{{ $stockIn->supplier->name ?? '-' }}</td>
                         <td>
                             @foreach($stockIn->items as $item)
                                 {{ $item->product->name }}
@@ -171,13 +164,11 @@
                             @endforeach
                         </td>
                         <td class="text-right">{{ number_format($stockIn->items->sum('quantity')) }}</td>
-                        <td class="text-right">Rp {{ number_format($stockIn->total_amount, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
                 <tr class="total-row">
-                    <td colspan="5" class="text-center">TOTAL</td>
+                    <td colspan="4" class="text-center">TOTAL</td>
                     <td class="text-right">{{ number_format($totalItems) }}</td>
-                    <td class="text-right">Rp {{ number_format($totalAmount, 0, ',', '.') }}</td>
                 </tr>
             </tbody>
         </table>

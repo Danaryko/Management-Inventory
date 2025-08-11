@@ -45,26 +45,6 @@
           @enderror
         </div>
 
-        {{-- Supplier --}}
-        <div>
-          <label for="supplier_id" class="block text-sm font-medium text-gray-700 mb-2">
-            Supplier
-          </label>
-          <select name="supplier_id" 
-                  id="supplier_id"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 @error('supplier_id') border-red-500 @enderror">
-            <option value="">Select Supplier (Optional)</option>
-            @foreach($suppliers as $supplier)
-              <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                {{ $supplier->name }}
-              </option>
-            @endforeach
-          </select>
-          @error('supplier_id')
-            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-          @enderror
-        </div>
-
         {{-- Date --}}
         <div>
           <label for="date" class="block text-sm font-medium text-gray-700 mb-2">
@@ -124,8 +104,6 @@
               <tr>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purchase Price</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
@@ -141,9 +119,8 @@
                       <option value="">Select Product</option>
                       @foreach($products as $product)
                         <option value="{{ $product->id }}" 
-                                data-name="{{ $product->name }}"
-                                data-sku="{{ $product->sku }}">
-                          {{ $product->name }} ({{ $product->sku }})
+                                data-name="{{ $product->name }}">
+                          {{ $product->name }}
                         </option>
                       @endforeach
                     </select>
@@ -161,20 +138,7 @@
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                            placeholder="Qty">
                   </td>
-                  <td class="px-4 py-3">
-                    <input type="number" 
-                           :name="`items[${index}][purchase_price]`"
-                           x-model.number="item.purchase_price"
-                           @input="calculateSubtotal(index)"
-                           min="0"
-                           step="0.01"
-                           required
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                           placeholder="0.00">
-                  </td>
-                  <td class="px-4 py-3">
-                    <div class="text-sm font-medium" x-text="formatCurrency(item.subtotal)"></div>
-                  </td>
+                  
                   <td class="px-4 py-3 text-center">
                     <button type="button" 
                             @click="removeItem(index)"
@@ -195,16 +159,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
-
-        {{-- Total --}}
-        <div class="mt-4 flex justify-end">
-          <div class="bg-gray-50 px-4 py-3 rounded-lg">
-            <div class="flex items-center gap-4">
-              <span class="text-sm font-medium text-gray-700">Total Amount:</span>
-              <span class="text-lg font-bold text-green-600" x-text="formatCurrency(totalAmount)"></span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -234,8 +188,6 @@ function stockInForm() {
         product_id: '',
         product_name: '',
         quantity: 1,
-        purchase_price: 0,
-        subtotal: 0
       });
     },
     
@@ -254,19 +206,6 @@ function stockInForm() {
       }
       
       this.calculateSubtotal(index);
-    },
-    
-    calculateSubtotal(index) {
-      const item = this.items[index];
-      item.subtotal = (item.quantity || 0) * (item.purchase_price || 0);
-    },
-    
-    get totalAmount() {
-      return this.items.reduce((total, item) => total + (item.subtotal || 0), 0);
-    },
-    
-    formatCurrency(amount) {
-      return '$' + (amount || 0).toFixed(2);
     },
     
     init() {

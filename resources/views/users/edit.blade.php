@@ -145,7 +145,7 @@
         >
           <option value="admin" {{ old('roles', $user->roles) === 'admin' ? 'selected' : '' }}>Admin</option>
           <option value="owner" {{ old('roles', $user->roles) === 'owner' ? 'selected' : '' }}>Owner</option>
-          <option value="operator" {{ old('roles', $user->roles) === 'operator' ? 'selected' : '' }}>Operator</option>
+          <option value="staff" {{ old('roles', $user->roles) === 'staff' ? 'selected' : '' }}>staff</option>
         </select>
         @error('roles')
           <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

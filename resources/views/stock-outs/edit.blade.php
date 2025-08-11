@@ -105,8 +105,6 @@
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Stock</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sale Price</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
@@ -123,10 +121,8 @@
                       @foreach($products as $product)
                         <option value="{{ $product->id }}" 
                                 data-name="{{ $product->name }}"
-                                data-sku="{{ $product->sku }}"
-                                data-stock="{{ $product->stock_quantity }}"
-                                data-price="{{ $product->price }}">
-                          {{ $product->name }} ({{ $product->sku }})
+                                data-stock="{{ $product->stock_quantity }}">
+                          {{ $product->name }}
                         </option>
                       @endforeach
                     </select>
@@ -154,17 +150,6 @@
                     </div>
                   </td>
                   <td class="px-4 py-3">
-                    <input type="number" 
-                           :name="`items[${index}][sale_price]`"
-                           x-model.number="item.sale_price"
-                           @input="calculateSubtotal(index)"
-                           min="0"
-                           step="0.01"
-                           required
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                           placeholder="0.00">
-                  </td>
-                  <td class="px-4 py-3">
                     <div class="text-sm font-medium" x-text="formatCurrency(item.subtotal)"></div>
                   </td>
                   <td class="px-4 py-3 text-center">
@@ -187,16 +172,6 @@
               </tr>
             </tbody>
           </table>
-        </div>
-
-        {{-- Total --}}
-        <div class="mt-4 flex justify-end">
-          <div class="bg-gray-50 px-4 py-3 rounded-lg">
-            <div class="flex items-center gap-4">
-              <span class="text-sm font-medium text-gray-700">Total Amount:</span>
-              <span class="text-lg font-bold text-red-600" x-text="formatCurrency(totalAmount)"></span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -230,8 +205,6 @@ function stockOutEditForm() {
         available_stock: 0,
         original_quantity: 0,
         quantity: 1,
-        sale_price: 0,
-        subtotal: 0
       });
     },
     
@@ -251,28 +224,13 @@ function stockOutEditForm() {
         this.items[index].current_stock = currentStock;
         // Available stock = current stock + original quantity (since original was subtracted)
         this.items[index].available_stock = currentStock + originalQuantity;
-        this.items[index].sale_price = parseFloat(selectedOption.dataset.price) || 0;
       } else {
         this.items[index].product_name = '';
         this.items[index].current_stock = 0;
         this.items[index].available_stock = 0;
-        this.items[index].sale_price = 0;
       }
       
       this.calculateSubtotal(index);
-    },
-    
-    calculateSubtotal(index) {
-      const item = this.items[index];
-      item.subtotal = (item.quantity || 0) * (item.sale_price || 0);
-    },
-    
-    get totalAmount() {
-      return this.items.reduce((total, item) => total + (item.subtotal || 0), 0);
-    },
-    
-    formatCurrency(amount) {
-      return '$' + (amount || 0).toFixed(2);
     },
     
     init() {
@@ -289,9 +247,7 @@ function stockOutEditForm() {
           current_stock: {{ $currentStock }},
           available_stock: {{ $currentStock + $originalQuantity }}, // Add back the original quantity
           original_quantity: {{ $originalQuantity }},
-          quantity: {{ $item->quantity }},
-          sale_price: {{ $item->sale_price }},
-          subtotal: {{ $item->subtotal }}
+          quantity: {{ $item->quantity }}
         });
       @endforeach
       

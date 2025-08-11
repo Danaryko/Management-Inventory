@@ -138,10 +138,6 @@
             <span class="summary-label">Total Items:</span>
             <span>{{ number_format($totalItems) }} items</span>
         </div>
-        <div class="summary-row">
-            <span class="summary-label">Total Nilai:</span>
-            <span>Rp {{ number_format($totalAmount, 0, ',', '.') }}</span>
-        </div>
     </div>
 
     @if($stockOuts->count() > 0)
@@ -153,7 +149,6 @@
                     <th style="width: 20%;">Referensi</th>
                     <th style="width: 30%;">Items</th>
                     <th style="width: 10%;">Qty</th>
-                    <th style="width: 18%;">Total Nilai</th>
                     <th style="width: 15%;">User</th>
                 </tr>
             </thead>
@@ -170,14 +165,12 @@
                             @endforeach
                         </td>
                         <td class="text-right">{{ number_format($stockOut->items->sum('quantity')) }}</td>
-                        <td class="text-right">Rp {{ number_format($stockOut->total_amount, 0, ',', '.') }}</td>
                         <td>{{ $stockOut->user->name }}</td>
                     </tr>
                 @endforeach
                 <tr class="total-row">
                     <td colspan="4" class="text-center">TOTAL</td>
                     <td class="text-right">{{ number_format($totalItems) }}</td>
-                    <td class="text-right">Rp {{ number_format($totalAmount, 0, ',', '.') }}</td>
                     <td>-</td>
                 </tr>
             </tbody>

@@ -137,7 +137,7 @@
           <option value="">Pilih Role</option>
           <option value="admin" {{ old('roles') === 'admin' ? 'selected' : '' }}>Admin</option>
           <option value="owner" {{ old('roles') === 'owner' ? 'selected' : '' }}>Owner</option>
-          <option value="operator" {{ old('roles') === 'operator' ? 'selected' : '' }}>Operator</option>
+          <option value="staff" {{ old('roles') === 'staff' ? 'selected' : '' }}>staff</option>
         </select>
         @error('roles')
           <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -145,7 +145,7 @@
         <p class="mt-1 text-sm text-gray-500">
           <strong>Admin:</strong> Akses penuh ke semua fitur.
           <strong>Owner:</strong> Akses terbatas ke laporan-laporan.
-          <strong>Operator:</strong> Akses dasar ke fitur operasional.
+          <strong>staff:</strong> Akses dasar ke fitur operasional.
         </p>
       </div>
 

@@ -18,8 +18,8 @@ class ActivityController extends Controller
         $query = Activity::with('user');
 
         // Role-based filtering
-        if ($user->roles === 'operator') {
-            // Operators see only their own activities
+        if ($user->roles === 'staff') {
+            // staffs see only their own activities
             $query->where('user_id', $user->id);
         } elseif ($user->roles === 'manager') {
             // Managers see activities from their department/team (for now, same as all)
@@ -67,7 +67,7 @@ class ActivityController extends Controller
         $query = Activity::with('user');
 
         // Apply same role-based filtering as index
-        if ($user->roles === 'operator') {
+        if ($user->roles === 'staff') {
             $query->where('user_id', $user->id);
         } elseif ($user->roles === 'manager') {
             // Manager filtering logic
@@ -162,7 +162,7 @@ class ActivityController extends Controller
         $query = Activity::with('user');
 
         // Role-based filtering for dashboard
-        if ($user->roles === 'operator') {
+        if ($user->roles === 'staff') {
             $query->where('user_id', $user->id);
         }
 

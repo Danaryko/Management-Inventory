@@ -38,8 +38,8 @@ class DashboardController extends Controller
             case 'manager':
                 $data = array_merge($data, $this->getManagerDashboardData());
                 break;
-            case 'operator':
-                $data = array_merge($data, $this->getOperatorDashboardData());
+            case 'staff':
+                $data = array_merge($data, $this->getstaffDashboardData());
                 break;
             default:
                 $data = array_merge($data, $this->getBasicDashboardData());
@@ -57,7 +57,6 @@ class DashboardController extends Controller
             'totalUsers' => User::count(),
             'totalProducts' => Product::count(),
             'totalCategories' => Category::count(),
-            'totalSuppliers' => Supplier::count(),
             'recentActivities' => Activity::with('user')->latest()->limit(10)->get(),
             'usersByRole' => User::selectRaw('roles, count(*) as count')->groupBy('roles')->pluck('count', 'roles'),
             'todayActivities' => Activity::whereDate('created_at', today())->count(),
@@ -81,7 +80,6 @@ class DashboardController extends Controller
         return [
             'totalUsers' => User::count(),
             'totalProducts' => Product::count(),
-            'totalSuppliers' => Supplier::count(),
             'recentActivities' => Activity::with('user')->latest()->limit(5)->get(),
             'businessStats' => [
                 'total_stock_value' => $this->calculateTotalStockValue(),
@@ -107,7 +105,7 @@ class DashboardController extends Controller
             'totalProducts' => Product::count(),
             'recentActivities' => Activity::with('user')->latest()->limit(8)->get(),
             'teamStats' => [
-                'team_members' => User::whereIn('roles', ['operator'])->count(),
+                'team_members' => User::whereIn('roles', ['staff'])->count(),
                 'today_activities' => Activity::whereDate('created_at', today())->count(),
                 'pending_tasks' => 0, // Placeholder for future task management
                 'completed_today' => Activity::whereDate('created_at', today())->where('action', 'completed')->count(),
@@ -122,13 +120,12 @@ class DashboardController extends Controller
     }
 
     /**
-     * Operator dashboard data - Personal workspace
+     * staff dashboard data - Personal workspace
      */
-    private function getOperatorDashboardData()
+    private function getstaffDashboardData()
     {
         $userId = auth()->id();
         return [
-            'myActivities' => Activity::where('user_id', $userId)->count(),
             'todayActivities' => Activity::where('user_id', $userId)->whereDate('created_at', today())->count(),
             'recentActivities' => Activity::where('user_id', $userId)->with('user')->latest()->limit(5)->get(),
             'personalStats' => [
@@ -139,7 +136,7 @@ class DashboardController extends Controller
             ],
             'quickActions' => [
                 ['title' => 'My Profile', 'url' => route('profile'), 'icon' => 'user', 'color' => 'blue'],
-                ['title' => 'My Activities', 'url' => route('activities.index'), 'icon' => 'document-text', 'color' => 'green'],
+                // ['title' => 'My Activities', 'url' => route('activities.index'), 'icon' => 'document-text', 'color' => 'green'],
                 ['title' => 'Stock Management', 'url' => route('products.index'), 'icon' => 'cube', 'color' => 'orange'],
                 ['title' => 'Quick Entry', 'url' => route('stock-ins.create'), 'icon' => 'plus', 'color' => 'purple'],
             ]
@@ -273,7 +270,7 @@ class DashboardController extends Controller
                     ['title' => 'Task Overview', 'type' => 'task_overview', 'size' => 'full'],
                 ]);
                 break;
-            case 'operator':
+            case 'staff':
                 $widgets = array_merge($widgets, [
                     ['title' => 'My Performance', 'type' => 'personal_stats', 'size' => 'half'],
                     ['title' => 'Today\'s Tasks', 'type' => 'daily_tasks', 'size' => 'half'],

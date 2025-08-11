@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\StockInController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\ActivityController;
@@ -43,14 +42,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.updateRole');
     });
 
-    // Activity History (Admin, Manager, Operator access)
+    // Activity History (Admin, Manager, staff access)
     Route::middleware('roles:admin')->group(function () {
         Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
         Route::get('/activities/export', [ActivityController::class, 'export'])->name('activities.export');
     });
 
-    // Inventory Management Features (Operator)
-    Route::middleware('roles:operator')->group(function () {
+    // Inventory Management Features (staff)
+    Route::middleware('roles:staff')->group(function () {
         // Categories Management
         Route::resource('categories', CategoryController::class);
         
@@ -58,7 +57,7 @@ Route::middleware(['auth'])->group(function () {
         // Route::resource('products', ProductController::class);
         
         // Suppliers Management
-        Route::resource('suppliers', SupplierController::class);
+        // Route::resource('suppliers', SupplierController::class);
         
         // Stock In Management
         Route::resource('stock-ins', StockInController::class);
@@ -75,8 +74,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports/stock-out/pdf', [StockOutController::class, 'exportPdf'])->name('reports.stock-out.pdf');
     });
 
-    // Operator Features - Activity History
-    Route::middleware('roles:operator')->group(function () {
+    // staff Features - Activity History
+    Route::middleware('roles:staff')->group(function () {
         Route::get('/history/stock-in', [StockInController::class, 'history'])->name('history.stock-in');
         Route::get('/history/stock-out', [StockOutController::class, 'history'])->name('history.stock-out');
     });
@@ -98,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Inventory Management - Products (multi role)
-    Route::middleware('roles:operator,owner,admin')->group(function () {
+    Route::middleware('roles:staff,owner,admin')->group(function () {
         Route::resource('products', ProductController::class);
     });
 

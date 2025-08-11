@@ -24,16 +24,16 @@ class DatabaseSeeder extends Seeder
                 'roles' => 'owner',
             ],
             [
-                'name' => 'Operator Satu',
-                'email' => 'operator@gmail.com',
+                'name' => 'Staff Satu',
+                'email' => 'staff@gmail.com',
                 'password' => Hash::make('password'),
-                'roles' => 'operator',
+                'roles' => 'staff',
             ],
             [
-                'name' => 'Operator Dua',
-                'email' => 'operator2@gmail.com',
+                'name' => 'Staff Dua',
+                'email' => 'staff2@gmail.com',
                 'password' => Hash::make('password'),
-                'roles' => 'operator',
+                'roles' => 'staff',
             ],
         ];
 

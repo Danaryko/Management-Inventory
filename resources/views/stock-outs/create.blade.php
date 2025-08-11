@@ -105,8 +105,6 @@
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Available Stock</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sale Price</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subtotal</th>
                 <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
@@ -123,10 +121,8 @@
                       @foreach($products as $product)
                         <option value="{{ $product->id }}" 
                                 data-name="{{ $product->name }}"
-                                data-sku="{{ $product->sku }}"
-                                data-stock="{{ $product->stock_quantity }}"
-                                data-price="{{ $product->price }}">
-                          {{ $product->name }} ({{ $product->sku }})
+                                data-stock="{{ $product->stock_quantity }}">
+                          {{ $product->name }}
                         </option>
                       @endforeach
                     </select>
@@ -153,17 +149,6 @@
                          class="text-xs text-red-600 mt-1">
                       Insufficient stock available
                     </div>
-                  </td>
-                  <td class="px-4 py-3">
-                    <input type="number" 
-                           :name="`items[${index}][sale_price]`"
-                           x-model.number="item.sale_price"
-                           @input="calculateSubtotal(index)"
-                           min="0"
-                           step="0.01"
-                           required
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                           placeholder="0.00">
                   </td>
                   <td class="px-4 py-3">
                     <div class="text-sm font-medium" x-text="formatCurrency(item.subtotal)"></div>
@@ -202,16 +187,6 @@
             </div>
           </div>
         </div>
-
-        {{-- Total --}}
-        <div class="mt-4 flex justify-end">
-          <div class="bg-gray-50 px-4 py-3 rounded-lg">
-            <div class="flex items-center gap-4">
-              <span class="text-sm font-medium text-gray-700">Total Amount:</span>
-              <span class="text-lg font-bold text-red-600" x-text="formatCurrency(totalAmount)"></span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {{-- Actions --}}
@@ -241,8 +216,6 @@ function stockOutForm() {
         product_name: '',
         available_stock: 0,
         quantity: 1,
-        sale_price: 0,
-        subtotal: 0
       });
     },
     
@@ -257,23 +230,12 @@ function stockOutForm() {
       if (selectedOption.value) {
         this.items[index].product_name = selectedOption.dataset.name;
         this.items[index].available_stock = parseInt(selectedOption.dataset.stock) || 0;
-        this.items[index].sale_price = parseFloat(selectedOption.dataset.price) || 0;
       } else {
         this.items[index].product_name = '';
         this.items[index].available_stock = 0;
-        this.items[index].sale_price = 0;
       }
       
       this.calculateSubtotal(index);
-    },
-    
-    calculateSubtotal(index) {
-      const item = this.items[index];
-      item.subtotal = (item.quantity || 0) * (item.sale_price || 0);
-    },
-    
-    get totalAmount() {
-      return this.items.reduce((total, item) => total + (item.subtotal || 0), 0);
     },
     
     get hasStockIssues() {
@@ -283,10 +245,6 @@ function stockOutForm() {
         item.available_stock >= 0 && 
         item.quantity > item.available_stock
       );
-    },
-    
-    formatCurrency(amount) {
-      return '$' + (amount || 0).toFixed(2);
     },
     
     init() {

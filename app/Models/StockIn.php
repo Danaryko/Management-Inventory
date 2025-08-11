@@ -7,22 +7,14 @@ class StockIn extends Model
 {
     protected $fillable = [
         'reference_number',
-        'supplier_id',
         'user_id',
         'date',
-        'total_amount',
         'notes',
     ];
 
     protected $casts = [
         'date' => 'date',
-        'total_amount' => 'decimal:2',
     ];
-
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
 
     public function user()
     {
