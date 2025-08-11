@@ -61,14 +61,32 @@
     </a>
 
     @auth
-      @if(auth()->user()->roles === 'admin')
+      {{-- Activity History for admins --}}
+      @if(in_array(auth()->user()->roles, ['admin']))
         {{-- Divider --}}
         <div class="pt-4 pb-2">
           <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
-            Admin
+            Activity Management
           </p>
         </div>
         
+        {{-- Activity History --}}
+        <a href="{{ route('activities.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('activities.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span>Activity History</span>
+          @if(request()->routeIs('activities.*'))
+            <div class="ml-auto">
+              <div class="h-2 w-2 bg-white rounded-full"></div>
+            </div>
+          @endif
+        </a>
+      @endif
+
+      @if(auth()->user()->roles === 'admin')
         {{-- User Management --}}
         <a href="{{ route('users.index') }}"
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
@@ -83,29 +101,140 @@
             </div>
           @endif
         </a>
+      @endif
 
-        {{-- Inventory Management (placeholder) --}}
-        <a href="#"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+      {{-- Inventory Management for operator --}}
+      @if(in_array(auth()->user()->roles, ['operator']))
+        {{-- Divider --}}
+        <div class="pt-4 pb-2">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
+            Inventory Management
+          </p>
+        </div>
+
+        {{-- Categories --}}
+        <a href="{{ route('categories.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('categories.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+          </svg>
+          <span>Categories</span>
+        </a>
+
+        {{-- Products --}}
+        <a href="{{ route('products.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('products.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
           <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
           </svg>
-          <span>Inventory</span>
-          <span class="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">
-            Soon
-          </span>
+          <span>Products</span>
         </a>
 
-        {{-- Reports (placeholder) --}}
-        <a href="#"
-           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
+        {{-- Suppliers --}}
+        <a href="{{ route('suppliers.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('suppliers.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
           <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
           </svg>
-          <span>Reports</span>
-          <span class="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">
-            Soon
-          </span>
+          <span>Suppliers</span>
+        </a>
+
+        {{-- Stock In --}}
+        <a href="{{ route('stock-ins.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('stock-ins.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+          </svg>
+          <span>Stock In</span>
+        </a>
+
+        {{-- Stock Out --}}
+        <a href="{{ route('stock-outs.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('stock-outs.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+          <span>Stock Out</span>
+        </a>
+      @endif
+
+      @if(auth()->user()->roles === 'owner' || auth()->user()->roles === 'admin')
+      {{-- Divider --}}
+        <div class="pt-4 pb-2">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
+            Inventory Management
+          </p>
+        </div>
+        {{-- Products --}}
+        <a href="{{ route('products.index') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('products.*') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+          </svg>
+          <span>Products</span>
+        </a>
+      @endif
+
+      {{-- Role-specific features --}}
+      @if(auth()->user()->roles === 'owner')
+        {{-- Reports Section for Owner --}}
+        <div class="pt-4 pb-2">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
+            Reports
+          </p>
+        </div>
+
+        {{-- Stock Reports --}}
+        <a href="{{ route('reports.stock-in') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('reports.stock-in') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span>Stock In Reports</span>
+        </a>
+
+        <a href="{{ route('reports.stock-out') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('reports.stock-out') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span>Stock Out Reports</span>
+        </a>
+      @endif
+
+      @if(auth()->user()->roles === 'operator')
+        {{-- History Section for Operator --}}
+        <div class="pt-4 pb-2">
+          <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">
+            History
+          </p>
+        </div>
+
+        {{-- Stock History --}}
+        <a href="{{ route('history.stock-in') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('history.stock-in') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Stock In History</span>
+        </a>
+
+        <a href="{{ route('history.stock-out') }}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+           {{ request()->routeIs('history.stock-out') ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+          <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Stock Out History</span>
         </a>
       @endif
     @endauth
