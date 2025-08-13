@@ -10,6 +10,8 @@ use App\Models\Supplier;
 use App\Models\StockIn;
 use App\Models\StockOut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
@@ -88,6 +90,7 @@ class DashboardController extends Controller
                 'low_stock_items' => $this->getLowStockCount(),
             ],
             'chartData' => $this->getStockChartData(),
+            'topStockOutChart' => $this->getTopStockOutProductsChartData(),
             'quickActions' => [
                 ['title' => 'Stock Reports', 'url' => route('reports.stock-in'), 'icon' => 'chart-bar', 'color' => 'blue'],
                 ['title' => 'Inventory Overview', 'url' => route('products.index'), 'icon' => 'cube', 'color' => 'orange'],
@@ -280,5 +283,33 @@ class DashboardController extends Controller
         }
 
         return response()->json($widgets);
+    }
+
+    /**
+     * Top produk berdasarkan stock-out (default 30 hari terakhir)
+     */
+    private function getTopStockOutProductsChartData(int $limit = 10, ?int $days = 30): array
+    {
+        // kolom tanggal: pakai 'date' jika ada, fallback ke 'created_at'
+        $dateCol = Schema::hasColumn('stock_outs', 'date') ? 'stock_outs.date' : 'stock_outs.created_at';
+
+        $rows = DB::table('stock_out_items')
+            ->join('stock_outs',   'stock_out_items.stock_out_id', '=', 'stock_outs.id')
+            ->join('products',     'products.id',                  '=', 'stock_out_items.product_id')
+            ->when($days, fn ($q)  => $q->where($dateCol, '>=', now()->subDays($days)->startOfDay()))
+            ->groupBy('products.id', 'products.name')
+            ->selectRaw('products.id, products.name AS product_name')
+            ->selectRaw('SUM(stock_out_items.quantity) AS total_qty')
+            ->selectRaw('COUNT(DISTINCT stock_outs.id) AS freq') // ganti ke COUNT(stock_out_items.id) jika mau frekuensi baris item
+            ->orderByDesc('total_qty')
+            ->limit($limit)
+            ->get();
+
+        return [
+            'labels' => $rows->pluck('product_name')->values(),
+            'qty'    => $rows->pluck('total_qty')->map(fn($v)=>(int)$v)->values(),
+            'freq'   => $rows->pluck('freq')->map(fn($v)=>(int)$v)->values(),
+            'window' => $days,
+        ];
     }
 }
