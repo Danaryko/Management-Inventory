@@ -224,6 +224,33 @@
         </div>
       </div>
     </div>
+
+    {{-- Top Products Stock-Out Chart Section --}}
+    @if(in_array(auth()->user()->roles, ['owner']))
+    <div class="bg-white rounded-xl border border-gray-200 p-6 mt-6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Top Products Stock-Out</h3>
+          <p class="text-sm text-gray-600">
+            Periode: {{ ($topStockOutChart['window'] ?? 90) === null ? 'Semua waktu' : ($topStockOutChart['window'].' hari terakhir') }}
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label for="metricSelect" class="text-xs text-gray-500">Metrik:</label>
+          <select id="metricSelect" class="text-sm border rounded-md px-2 py-1">
+            <option value="qty" selected>Total Qty</option>
+            <option value="freq">Frekuensi</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="relative" style="height: 420px;">
+        <canvas id="topStockOutChart"></canvas>
+      </div>
+    </div>
+  @endif
+
+
   @elseif(auth()->user()->roles === 'manager, admin')
     {{-- Manager Stats --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -517,6 +544,7 @@
 </div>
 @endsection
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @if(auth()->user()->roles === 'owner')
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -549,7 +577,7 @@ document.addEventListener('DOMContentLoaded', function() {
       plugins: {
         title: {
           display: true,
-          text: 'Distribusi Stock In vs Stock Out (6 bulan terakhir)'
+          text: 'Distribusi Stock In & Stock Out (6 bulan terakhir)'
         },
         legend: {
           position: 'bottom'
@@ -572,3 +600,63 @@ document.addEventListener('DOMContentLoaded', function() {
 @endpush
 @endif
 
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const el = document.getElementById('topStockOutChart');
+  if (!el) return;
+
+  const d = @json($topStockOutChart ?? []);
+  const labels = d.labels || [];
+  const qty    = (d.qty  || []).map(n => Number(n) || 0);
+  const freq   = (d.freq || []).map(n => Number(n) || 0);
+
+  // helper untuk ganti dataset
+  const metricSelect = document.getElementById('metricSelect');
+  const makeDataset = (key) => ({
+    label: key === 'freq' ? 'Frekuensi Transaksi' : 'Total Qty Out',
+    data: key === 'freq' ? freq : qty,
+    backgroundColor: 'rgba(239, 68, 68, 0.2)', // merah lembut
+    borderColor: 'rgb(239, 68, 68)',
+    borderWidth: 1,
+    borderRadius: 6,
+    maxBarThickness: 24,
+  });
+
+  const chart = new Chart(el.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [ makeDataset('qty') ]
+    },
+    options: {
+      indexAxis: 'x', // horizontal bar untuk ranking
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { beginAtZero: true, ticks: { precision: 0 } },
+        y: { ticks: { autoSkip: false } }
+      },
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: `Top Stock-Out Products (${(d.window ?? 30) === null ? 'Semua waktu' : (d.window + ' hari')})`
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}`
+          }
+        }
+      }
+    }
+  });
+
+  metricSelect?.addEventListener('change', (e) => {
+    chart.data.datasets = [ makeDataset(e.target.value) ];
+    chart.update();
+  });
+});
+</script>
+@endpush

@@ -10,7 +10,7 @@
         "doctrine/dbal": "*",
         "dompdf/dompdf": "^2.0",
         "laravel/framework": "^12.0",
-        "laravel/sanctum": "^4.2",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "maatwebsite/excel": "^3.1"
     },
@@ -32,7 +32,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "App\\": "app/"
         }
     },
     "scripts": {
