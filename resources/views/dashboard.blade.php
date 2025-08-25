@@ -387,8 +387,8 @@
           </svg>
         </div>
         <div class="ml-3">
-          <p class="text-sm font-medium text-gray-900">Lihat Profil</p>
-          <p class="text-xs text-gray-500">Kelola informasi akun</p>
+          <p class="text-sm font-medium text-gray-900">My Profile</p>
+          <p class="text-xs text-gray-500">Quick Access</p>
         </div>
       </a>
 

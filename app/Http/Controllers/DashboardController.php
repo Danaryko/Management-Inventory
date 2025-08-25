@@ -138,9 +138,9 @@ class DashboardController extends Controller
                 'efficiency_score' => '95%', // Placeholder calculation
             ],
             'quickActions' => [
-                ['title' => 'My Profile', 'url' => route('profile'), 'icon' => 'user', 'color' => 'blue'],
+                // ['title' => 'My Profile', 'url' => route('profile'), 'icon' => 'user', 'color' => 'blue'],
                 // ['title' => 'My Activities', 'url' => route('activities.index'), 'icon' => 'document-text', 'color' => 'green'],
-                ['title' => 'Stock Management', 'url' => route('products.index'), 'icon' => 'cube', 'color' => 'orange'],
+                ['title' => 'Inventory Overview', 'url' => route('products.index'), 'icon' => 'cube', 'color' => 'orange'],
                 ['title' => 'Quick Entry', 'url' => route('stock-ins.create'), 'icon' => 'plus', 'color' => 'purple'],
             ]
         ];

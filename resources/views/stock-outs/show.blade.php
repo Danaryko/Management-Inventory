@@ -150,9 +150,6 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                 {{ number_format($item->quantity) }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                ${{ number_format($item->subtotal, 2) }}
-              </td>
             </tr>
           @endforeach
         </tbody>
